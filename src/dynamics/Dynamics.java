@@ -22,7 +22,7 @@ import java.io.FileReader;
 
 
 public class Dynamics extends java.applet.Applet implements Runnable {
-    int option =  4;
+    int option =  11;
     Dimension appletSize;
     private Thread testThread = null;
     int xmax, ymax, count;
@@ -346,6 +346,12 @@ public class Dynamics extends java.applet.Applet implements Runnable {
             clearScreen = true;
             dt = 32.0;
             screenXYscale =    200000.0 * 10.0/1E11;            
+        } else if ( option == 11 ) {
+            // sun
+            centralBody =   1;
+            clearScreen = true;
+            dt = 512.0;
+            screenXYscale =    1000.0 * 10.0/1E11;
         }
     }    
 }
