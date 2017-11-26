@@ -1,0 +1,3 @@
+State vectors (kg/km/s): name, mass, radius, JDCT, date, x, y, z, vx, vy, vz, (Earth circular orbit with 365.256 day period)
+Sol, 1.988544E30, 0.001, 2458033.500000000, date, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+Earth, 5.972465E24, 0.001, 2458033.500000000, date, 1.495837E8, 0.0, 0.0, 0.0, 29.78193936621587, 0.0, 
