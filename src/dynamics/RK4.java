@@ -16,22 +16,22 @@ public class RK4 {
 
 /*
  * RK4 class carries out RK4 motion calculations on all Bodies in Pool using static methods
- 
+
 class RK4{
-    
+
     public static Pool pool;
     public static Body body;            // pool body under consideration
-    
+
     public static void moveRK4( Pool p, double dt ) {
         int m, n;
-        
+
         pool = p;
-        
+
         // don't perform calculations using dt = 0. 19 aug 2016
         if ( dt != 0 ) {
 
             // find straight-line-advanced body locations
-            for (n = 0; n < pool.nbodies; n++) {                
+            for (n = 0; n < pool.nbodies; n++) {
 //              if ( pool.b[n].status == 3 ) {
                     body = pool.b[n];
                     advanceBody(  dt );
@@ -47,21 +47,21 @@ class RK4{
                     pool.state[n] = integrate( pool.state[n], dt );
                 }
             }
-            
+
             // update positions and speeds
             for (n = 0; n < pool.nbodies; n++) {
                 body = pool.b[n];
                 if ( pool.b[n].status >= 2 && pool.b[n].activated && pool.b[n].inFreeMotion ) {
-                    setVectors( pool.b[n], pool.state[n] );    // RK4 
+                    setVectors( pool.b[n], pool.state[n] );    // RK4
                 }
-            }    
+            }
 
-        } 
+        }
     }
- 
-    
-// RK4 code *************************************************************************************************************    
-    
+
+
+// RK4 code *************************************************************************************************************
+
     // copied from http://gafferongames.com/game-physics/integration-basics/
     // derivatives dx, dv are held as vx, ax in a StateVector.
     // y and z derivatives are also calculated, of course.
@@ -71,7 +71,7 @@ class RK4{
          StateVector dummy = new StateVector();
          StateVector derivative_a, derivative_b, derivative_c, derivative_d;
 
-        
+
          derivative_a = evaluate(state, 0.0, dummy, 0  );              // derivative a returns initial velocity and acceleration
          derivative_b = evaluate(state, dt*0.5, derivative_a, 1 );
          derivative_c = evaluate(state, dt*0.5, derivative_b, 1 );
@@ -93,8 +93,8 @@ class RK4{
 
          return( state );
     }
-    
-    
+
+
     // http://gafferongames.com/game-physics/integration-basics/
     // returns derivative dx, dv as vx, ax in StateVector
     public static StateVector evaluate( StateVector initial, double t, StateVector d, int aindex ){
@@ -104,12 +104,12 @@ class RK4{
         state.z = initial.z + d.vz * t;
         state.vx = initial.vx + d.ax * t;
         state.vy = initial.vy + d.ay * t;
-        state.vz = initial.vz + d.az * t;        
+        state.vz = initial.vz + d.az * t;
 
         return( acceleration( state, aindex ) );
     }
-    
-    
+
+
     // RK4 acceleration
     // Finds acceleration on this body due to all other bodies (> than some minimum mass)
     // Returns this body's current position, speed, and acceleration in a StateVector
@@ -119,20 +119,20 @@ class RK4{
         a = 0;
         StateVector acc = new StateVector();
         StateVector s = new StateVector();
-        
+
         acc.copyStateVectors( state );                        // set accelerations to zero
         acc.ax = 0;
         acc.ay = 0;
         acc.az = 0;
-        
+
         for( int n=0; n<pool.nbodies; n++ ) {
             if ( body.activated && body.inFreeMotion && (n != body.num) && (pool.b[n].status == 3) ) {
- 
+
                 x = state.x - pool.b[n].advanced[ai].x;                 // x distance from m
                 y = state.y - pool.b[n].advanced[ai].y;                 // y distance ..   ..
                 z = state.z - pool.b[n].advanced[ai].z;                 // z distance ..   ..
                 r = Math.sqrt(x * x + y * y + z * z);                       // distance   ..   ..
-               
+
                 // only find interactions with massive bodies > 1 kg mass
                 if ( pool.b[n].m > 1.0 )  {
 
@@ -143,16 +143,16 @@ class RK4{
                         acc.ay = acc.ay + a * y / r;                                // y component of accel
                         acc.az = acc.az + a * z / r;                                // z component of accel
                     }
-                }                   
+                }
             }
-        }        
-        
+        }
+
         return( acc );
     }
-    
+
     // set new positions and speeds using RK4 calculations
     public static void setVectors( Body body, StateVector state ) {
-        
+
         body.lastState.copyStateVectors( body.currentState );
         body.currentState.x = state.x;
         body.currentState.y = state.y;
@@ -160,25 +160,25 @@ class RK4{
         body.currentState.vx = state.vx;
         body.currentState.vy = state.vy;
         body.currentState.vz = state.vz;
-         
+
     }
-    
+
     // produce advanced positions 0 s ahead, dt/2 ahead, and dt ahead i
     public static void advanceBody( double t ) {
-        
+
         for ( int i=0; i<=2; i++ ) {
             body.advanced[i].x = body.currentState.x + body.currentState.vx * (double)i * t / 2.0;
             body.advanced[i].y = body.currentState.y + body.currentState.vy * (double)i * t / 2.0;
             body.advanced[i].z = body.currentState.z + body.currentState.vz * (double)i * t / 2.0;
         }
-        
+
     }
-   
-// end RK4 code ***********************************************************************************************************    
-    
+
+// end RK4 code ***********************************************************************************************************
+
 }
 */
 
 
-    
+
 }

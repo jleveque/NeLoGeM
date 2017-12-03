@@ -10,9 +10,9 @@ package dynamics;
  */
 public class Tetrahedron extends Process {
 //  Dynamics ap;
-    
+
     Tetrahedron() { }
-    
+
     Tetrahedron( Dynamics a ) {
         this.ap = a;
         double mass = 1.0;
@@ -23,16 +23,16 @@ public class Tetrahedron extends Process {
         b[this.nbodies] = new Body( ap, -this.nbodies, svref, mass, 1.0, true );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
-       
+
         b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
-       
+
         sv.setStateVector( 0, 7, 0, 0, 0, 0 );
         b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
-       
+
         sv.setStateVector( 0, 2, 6, 0, 0, 0 );
         b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
         b[this.nbodies].referenceFrame = 0;
@@ -40,13 +40,13 @@ public class Tetrahedron extends Process {
 /*                              leave ties out to prevent breakup of tetrahedron
         int m;
         for ( int n=0; n<nbodies; n++ ) {
-            m = n+1; 
-            if ( m > 3 ) m = 0; 
+            m = n+1;
+            if ( m > 3 ) m = 0;
             this.t[nties] = new Tie( ap, 0, b[n], b[m], 1.5, 2000.0 );
             nties++;
         }
-*/      
-    
+*/
+
     }
-       
+
 }

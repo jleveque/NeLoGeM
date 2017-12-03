@@ -23,10 +23,10 @@ public class ReferenceFrame {
     double latitude;            // latitude (degrees)
     double longitude;           // longitude (degrees)
     double rmul;                // radius multiple (1.0 for surface)
-    
+
     // default constructor
     ReferenceFrame() { }
-    
+
     // reference frame origin and axes held in statevector XYZ
     ReferenceFrame( Dynamics a, StateVector origin, StateVector xAxis, StateVector yAxis, StateVector zAxis ) {
         this.ap = a;
@@ -35,16 +35,16 @@ public class ReferenceFrame {
         referenceFrame[Yaxis] = new StateVector( origin.x, origin.y, origin.z, yAxis.x, yAxis.y, yAxis.z );
         referenceFrame[Zaxis] = new StateVector( origin.x, origin.y, origin.z, zAxis.x, zAxis.y, zAxis.z );
     }
-    
+
     // reference frame on surface of planet b0
     ReferenceFrame( Dynamics a, int bnum, double lat, double lon, double rmul, double extend ) {
         this.ap = a;
         this.bref = bnum;
         this.latitude = lat;
         this.longitude = lon;
-        this.rmul = rmul;        
+        this.rmul = rmul;
     }
-    
+
     // 17 nov 2017
     // v[] contains a set of XYZ body locations within the current reference frame
     // at lat-long-rmul on the surface of a planet, and with the same velocity as
@@ -62,7 +62,7 @@ public class ReferenceFrame {
 //      double axialRadius = rmul * ap.ss.b[this.bref].r * Math.cos( rLat );
         StateVector o = new StateVector( rmul * ap.ss.b[bref].r, 0, 0, 0, 0, 0 );
 //      System.out.println( "rmul " + rmul + " vy "  + (axialRadius * angularVelocity) );
-        
+
         for ( n=0; n<ns; n++ ) {
             // move vector from planet 0,0,0 origin to surface on X axis
             v[n] = addPositionStateVector( v[n], o );
@@ -88,10 +88,10 @@ public class ReferenceFrame {
             v[n] = addPositionStateVector( v[n], ap.ss.b[bref].currentState );
             // v[n] is now a barycentric state vector carrying XYZ. vx, vy, vz
         }
-                
+
         return( v );
     }
-        
+
     // transformFromBarycentricXYZ() is opposite of transformToBarycentricXYZ()
     StateVector[] transformFromBarycentricXYZ( StateVector[] v, int ns ) {
         int n;
@@ -117,8 +117,8 @@ public class ReferenceFrame {
             v[n] = subtractPositionStateVector( v[n], o );
             // v[n] now holds XYZ and vx, vy, vz in rotating reference frame
         }
-        
-        return( v ); 
+
+        return( v );
     }
 
     // move vector v
@@ -154,14 +154,14 @@ public class ReferenceFrame {
         return( v );
     }
 
-    // 
+    //
     StateVector swapAxes( StateVector v ) {
         double temp = v.x;
         v.x = v.z;
-        v.z = v.y;        
-        v.y = temp;        
+        v.z = v.y;
+        v.y = temp;
         return( v );
     }
- 
-    
+
+
 }

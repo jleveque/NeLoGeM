@@ -12,14 +12,14 @@ import java.awt.Graphics;
  * @author CFD
  */
 public class SolarSystemApollo11 extends Process{
-    
+
 //  Dynamics ap;
-  
+
 /*
 Apollo 11 S-IVB
-The Apollo Saturn V SIVB was the third stage of the Saturn V booster. The SIVB consisted of a truncated cone with a bottom diameter of 10.06 m topped by a long cylinder with a diameter of 6.60 m. Total height was 17.80 m. It contained liquid hydrogen and liquid 
-oxygen tanks and a J2 engine. It was launched into Earth orbit attached to the Command, Service, and Lunar Modules (CSM and LM). The SIVB provided the thrust to take the CSM and LM from Earth orbit into a lunar transfer orbit. After achieving trajectory 
-towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 1969 and made a course correction to head for lunar orbit. The SIVB stage was left on a ballistic trajectory to fly by the Moon on 19 July and entered solar orbit.    
+The Apollo Saturn V SIVB was the third stage of the Saturn V booster. The SIVB consisted of a truncated cone with a bottom diameter of 10.06 m topped by a long cylinder with a diameter of 6.60 m. Total height was 17.80 m. It contained liquid hydrogen and liquid
+oxygen tanks and a J2 engine. It was launched into Earth orbit attached to the Command, Service, and Lunar Modules (CSM and LM). The SIVB provided the thrust to take the CSM and LM from Earth orbit into a lunar transfer orbit. After achieving trajectory
+towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 1969 and made a course correction to head for lunar orbit. The SIVB stage was left on a ballistic trajectory to fly by the Moon on 19 July and entered solar orbit.
 
 2440419.194479167, A.D. 1969-Jul-16 16:40:03.0000,  6.343499939926510E+07, -1.383448940239173E+08, -1.693750687410682E+04,  2.085980004925432E+01,  1.835087874228012E+01,  7.745846007922585E-01,  5.076677773007958E+02,  1.521949708044022E+08, -7.986611412721560E+00,
 2440419.215312500, A.D. 1969-Jul-16 17:10:03.0000,  6.347277701361713E+07, -1.383152833021331E+08, -1.601712773867697E+04,  2.131548690069996E+01,  1.524264687605356E+01,  3.473031427163100E-01,  5.076305406144729E+02,  1.521838075266817E+08, -4.963362719238625E+00,
@@ -227,24 +227,24 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
 2440423.423645834, A.D. 1969-Jul-20 22:10:03.0000,  7.251429984450825E+07, -1.336079817039608E+08, -3.536764802716672E+04,  2.482110986359691E+01,  1.306644963350430E+01, -1.721928449847949E-01,  5.070768670326780E+02,  1.520178203626657E+08,  3.559420170623815E-01,
 2440423.444479167, A.D. 1969-Jul-20 22:40:03.0000,  7.255897672881037E+07, -1.335844535958712E+08, -3.567744861081988E+04,  2.481986299857991E+01,  1.307589440821130E+01, -1.720302680360657E-01,  5.070790054445525E+02,  1.520184614424178E+08,  3.563632273016638E-01,
 2440423.465312500, A.D. 1969-Jul-20 23:10:03.0000,  7.260365132059403E+07, -1.335609084788355E+08, -3.598695762649179E+04,  2.481856368311656E+01,  1.308534681933093E+01, -1.718688659029937E-01,  5.070811462940945E+02,  1.520191032529641E+08,  3.567559527293203E-01,
-2440423.486145834, A.D. 1969-Jul-20 23:40:03.0000,  7.264832352802618E+07, -1.335373463421331E+08, -3.629617684658617E+04,  2.481721377770476E+01,  1.309480675677054E+01, -1.717085284105089E-01,  5.070832894230895E+02,  1.520197457468734E+08,  3.571211260820177E-01,    
-*/    
-    
-    double[][] ssbody = { 
-// (0) Barycentre, (1) Sun, (2) Mercury, (3) Venus, (4) Earth, (5) 5Mars, (6) Jupiter, (7) Saturn, (8) Uranus, (9) Neptune, (10) Luna, (11) Apollo 11 S-IVB,  on date  A.D. 1969-Jul-16 16:40:03.0000,   
-// State vectors (kg/km/s): bnum, unused, mass, equ radius, polar radius, spin axis RA, spin axis Dec, rotation period, equinox adjust, JDCT (Julian date), x, y, z, vx, vy, vz, (NASA barycentric state vectors 25 April 2016)        
-        { 0, 0, 1.0, 1.0, 1.0, 0, 0, 0, 0, 2453402.500000000, 0, 0, 0, 0, 0, 0, }, 
-        { 1, 0, 1.988544E30, 695500.032, 695500.032, 90, 0, 0, 0, 2440419.194479167,  6.724047683705250E+05,  1.368183371960980E+05, -9.167197307212591E+03, -8.269140890871091E-04,  9.689398471482327E-03, -2.226706834967561E-05, }, 
-        { 2, 0, 3.301255063417226E23, 2440.0, 2440.0, 90, 0, 0, 0, 2440419.194479167,  5.604580585865147E+06,  4.580931634939645E+07,  3.266908795460155E+06, -5.819890896155647E+01,  7.041518066694305E+00,  5.920417974727668E+00, }, 
-        { 3, 0, 4.867634243309893E24, 6051.8, 6051.8, 90, 0, 0, 0, 2440419.194479167,  1.090060479592348E+08, -6.585748083456414E+06, -6.356240636174833E+06,  2.009846475544523E+00,  3.480302257313270E+01,  3.565173922421874E-01, }, 
-        { 4, 0, 5.972465000E24, 6371.01, 6371.01, 90, 0, 86164.090530833, 0, 2440419.194479167,  6.343341206037694E+07, -1.383555353816606E+08, -1.844088716181368E+04,  2.665426533401776E+01,  1.220446608265464E+01,  1.803982871122933E-03, }, 
-        { 5, 0, 6.417332641995618E23, 3389.9, 3389.9, 90, 0, 0, 0, 2440419.194479167,  2.407535146016249E+07, -2.143240193358925E+08, -5.076693799454808E+06,  2.500557126397957E+01,  4.717913359386351E+00, -5.177244329457018E-01, }, 
-        { 6, 0, 1.8986457800595672E27, 71492.0, 71492.0, 90, 0, 0, 0, 2440419.194479167, -8.014819508685250E+08, -1.471850030703883E+08,  1.856795105978628E+07,  2.208387047361322E+00, -1.224168254647869E+01,  9.203335002956337E-04, }, 
-        { 7, 0, 5.6849685143514635600949590702329E26, 58232.0, 58232.0, 90, 0, 0, 0, 2440419.194479167,  1.171909171745146E+09,  7.368582438261852E+08, -5.945552048404571E+07, -5.666934883678226E+00,  8.158044006168787E+00,  8.206541665798017E-02, }, 
-        { 8, 0, 8.6824683933763012819043797233395E25, 25362.0, 25362.0, 90, 0, 0, 0, 2440419.194479167, -2.731823625809680E+09, -1.858544690681215E+08,  3.476510714276076E+07,  4.116629160582377E-01, -7.112252550218088E+00, -3.182262258414470E-02, }, 
-        { 9, 0, 1.0243763726603912365620370237477E26, 24624.0, 24624.0, 90, 0, 0, 0, 2440419.194479167, -2.394403728893961E+09, -3.850110609895716E+09,  1.344396847873490E+08,  4.581475724820936E+00, -2.839643433710780E+00, -4.774491231976929E-02, }, 
-        { 10, 0, 7.347075E22, 1737.53, 1727.53, 90, 0, 0, 0, 2440419.194479167,  6.313672400814780E+07, -1.380826192727806E+08,  2.445887219801545E+03,  2.600904780466872E+01,  1.147458454512634E+01, -6.957265739587015E-02, }, 
-//      { 11, 0, 1000.0, 0.01, 0.01, 90, 0, 0, 0, 2440419.194479167,  6.343499939926510E+07, -1.383448940239173E+08, -1.693750687410682E+04,  2.085980004925432E+01,  1.835087874228012E+01,  7.745846007922585E-01,  5.076677773007958E+02,  1.521949708044022E+08, -7.986611412721560E+00, } 
+2440423.486145834, A.D. 1969-Jul-20 23:40:03.0000,  7.264832352802618E+07, -1.335373463421331E+08, -3.629617684658617E+04,  2.481721377770476E+01,  1.309480675677054E+01, -1.717085284105089E-01,  5.070832894230895E+02,  1.520197457468734E+08,  3.571211260820177E-01,
+*/
+
+    double[][] ssbody = {
+// (0) Barycentre, (1) Sun, (2) Mercury, (3) Venus, (4) Earth, (5) 5Mars, (6) Jupiter, (7) Saturn, (8) Uranus, (9) Neptune, (10) Luna, (11) Apollo 11 S-IVB,  on date  A.D. 1969-Jul-16 16:40:03.0000,
+// State vectors (kg/km/s): bnum, unused, mass, equ radius, polar radius, spin axis RA, spin axis Dec, rotation period, equinox adjust, JDCT (Julian date), x, y, z, vx, vy, vz, (NASA barycentric state vectors 25 April 2016)
+        { 0, 0, 1.0, 1.0, 1.0, 0, 0, 0, 0, 2453402.500000000, 0, 0, 0, 0, 0, 0, },
+        { 1, 0, 1.988544E30, 695500.032, 695500.032, 90, 0, 0, 0, 2440419.194479167,  6.724047683705250E+05,  1.368183371960980E+05, -9.167197307212591E+03, -8.269140890871091E-04,  9.689398471482327E-03, -2.226706834967561E-05, },
+        { 2, 0, 3.301255063417226E23, 2440.0, 2440.0, 90, 0, 0, 0, 2440419.194479167,  5.604580585865147E+06,  4.580931634939645E+07,  3.266908795460155E+06, -5.819890896155647E+01,  7.041518066694305E+00,  5.920417974727668E+00, },
+        { 3, 0, 4.867634243309893E24, 6051.8, 6051.8, 90, 0, 0, 0, 2440419.194479167,  1.090060479592348E+08, -6.585748083456414E+06, -6.356240636174833E+06,  2.009846475544523E+00,  3.480302257313270E+01,  3.565173922421874E-01, },
+        { 4, 0, 5.972465000E24, 6371.01, 6371.01, 90, 0, 86164.090530833, 0, 2440419.194479167,  6.343341206037694E+07, -1.383555353816606E+08, -1.844088716181368E+04,  2.665426533401776E+01,  1.220446608265464E+01,  1.803982871122933E-03, },
+        { 5, 0, 6.417332641995618E23, 3389.9, 3389.9, 90, 0, 0, 0, 2440419.194479167,  2.407535146016249E+07, -2.143240193358925E+08, -5.076693799454808E+06,  2.500557126397957E+01,  4.717913359386351E+00, -5.177244329457018E-01, },
+        { 6, 0, 1.8986457800595672E27, 71492.0, 71492.0, 90, 0, 0, 0, 2440419.194479167, -8.014819508685250E+08, -1.471850030703883E+08,  1.856795105978628E+07,  2.208387047361322E+00, -1.224168254647869E+01,  9.203335002956337E-04, },
+        { 7, 0, 5.6849685143514635600949590702329E26, 58232.0, 58232.0, 90, 0, 0, 0, 2440419.194479167,  1.171909171745146E+09,  7.368582438261852E+08, -5.945552048404571E+07, -5.666934883678226E+00,  8.158044006168787E+00,  8.206541665798017E-02, },
+        { 8, 0, 8.6824683933763012819043797233395E25, 25362.0, 25362.0, 90, 0, 0, 0, 2440419.194479167, -2.731823625809680E+09, -1.858544690681215E+08,  3.476510714276076E+07,  4.116629160582377E-01, -7.112252550218088E+00, -3.182262258414470E-02, },
+        { 9, 0, 1.0243763726603912365620370237477E26, 24624.0, 24624.0, 90, 0, 0, 0, 2440419.194479167, -2.394403728893961E+09, -3.850110609895716E+09,  1.344396847873490E+08,  4.581475724820936E+00, -2.839643433710780E+00, -4.774491231976929E-02, },
+        { 10, 0, 7.347075E22, 1737.53, 1727.53, 90, 0, 0, 0, 2440419.194479167,  6.313672400814780E+07, -1.380826192727806E+08,  2.445887219801545E+03,  2.600904780466872E+01,  1.147458454512634E+01, -6.957265739587015E-02, },
+//      { 11, 0, 1000.0, 0.01, 0.01, 90, 0, 0, 0, 2440419.194479167,  6.343499939926510E+07, -1.383448940239173E+08, -1.693750687410682E+04,  2.085980004925432E+01,  1.835087874228012E+01,  7.745846007922585E-01,  5.076677773007958E+02,  1.521949708044022E+08, -7.986611412721560E+00, }
     };
     final int BNUM = 0;         // body number ( Sun=1, Mercury=2 ... Luna=10 )
     final int UNUSED = 1;
@@ -258,48 +258,48 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
     final int JDCT = 9;         // Julian Date (days)
     final int X = 10;           // body X location (km)
     final int Y = 11;           //  ..  Y    ..
-    final int Z = 12;           //  ..  Z    .. 
+    final int Z = 12;           //  ..  Z    ..
     final int VX = 13;          //  ..  X velocity (km/sec)
     final int VY = 14;          //  ..  Y    ..
     final int VZ = 15;          //  ..  Z    ..
-    
+
     String bnames[] = { "Sol, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Luna" };
-    
-    double axialRotation[][] = { 
+
+    double axialRotation[][] = {
     //   RA (degrees),  dec,  x,   y,   z,   period, obliquity  source http://nssdc.gsfc.nasa.gov/planetary/planetfact.html
     //  Obliquity figures from https://en.wikipedia.org/wiki/Axial_tilt.
-    //  "obliquity is the angle between the axis of rotation and the direction perpendicular to the orbital plane"    
+    //  "obliquity is the angle between the axis of rotation and the direction perpendicular to the orbital plane"
     //  My calculations of axial tilt only agree with those of Sun and Earth shown below. Others are a few degrees different.
-    //  I suspect that exial tilt of other planets may be measured with respect to their own orbital planes rather than ecliptic plane.  
+    //  I suspect that exial tilt of other planets may be measured with respect to their own orbital planes rather than ecliptic plane.
     //  { 37.9461468,  89.26413805,  0,  0,  0,  100.0, 0 },             // RA dec of Polaris (for test purposes)
         { 0,  0,  0,  0,  0,  0,  0 },                // 0 barycentre
         { 286.130, 63.870, 0, 0, 0, 609.12, 7.25 },   // 1 sun
         { 281.010, 61.414, 0, 0, 0, 1407.6, 0.03 },   // 2 mercury
         {  92.76, -67.16, 0, 0, 0, 5832.6, 2.64 },    // 3 venus +ve pole
-        {    0.0,  90.0,  0, 0, 0, 23.9345, 23.44 },  // 4 earth            
-        { 317.681, 52.887, 0, 0, 0, 24.6229, 25.19 }, // 5 mars             
-        { 268.057, 64.495, 0, 0, 0, 9.9250, 3.13 },   // 6 jupiter          
-        { 40.589, 83.537, 0, 0, 0, 10.656, 26.73 },   // 7 saturn           
-        {  77.311, 15.175, 0, 0, 0, 17.24, 82.23 },   // 8 uranus +ve pole          
-        { 299.36, 43.46, 0, 0, 0, 16.11, 28.32 },     // 9 neptune          
-        {    0.0, 90.0, 0, 0, 0, 660.0,  0 },         // 10 Luna            
-        {    0.0, 90.0, 0, 0, 0, 0.0,  0 },           // 10 Apollo11 S-IVB            
+        {    0.0,  90.0,  0, 0, 0, 23.9345, 23.44 },  // 4 earth
+        { 317.681, 52.887, 0, 0, 0, 24.6229, 25.19 }, // 5 mars
+        { 268.057, 64.495, 0, 0, 0, 9.9250, 3.13 },   // 6 jupiter
+        { 40.589, 83.537, 0, 0, 0, 10.656, 26.73 },   // 7 saturn
+        {  77.311, 15.175, 0, 0, 0, 17.24, 82.23 },   // 8 uranus +ve pole
+        { 299.36, 43.46, 0, 0, 0, 16.11, 28.32 },     // 9 neptune
+        {    0.0, 90.0, 0, 0, 0, 660.0,  0 },         // 10 Luna
+        {    0.0, 90.0, 0, 0, 0, 0.0,  0 },           // 10 Apollo11 S-IVB
     };
 
     Map bmap[] = new Map[12];                   // body maps
-    
+
     SolarSystemApollo11() { }
 
     // this constructor used to create solar system from ssbody[] array
     SolarSystemApollo11( Dynamics a ) {
-        
+
         double jd = 0;
         this.ap = a;
         int nrows = ssbody.length;
         int ncols = ssbody[0].length;
         StateVector s;
-        
-        for ( int n=0; n<nrows; n++ ) {                        
+
+        for ( int n=0; n<nrows; n++ ) {
             jd = ssbody[n][JDCT];
             s = new StateVector( km_m(ssbody[n][X]), km_m(ssbody[n][Y]), km_m(ssbody[n][Z]), km_m(ssbody[n][VX]), km_m(ssbody[n][VY]), km_m(ssbody[n][VZ]) );
             b[n] = new Body( ap, (int)ssbody[n][BNUM], s, ssbody[n][MASS], ssbody[n][ERADIUS]*1000.0, true );
@@ -313,42 +313,42 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         b[0].inFreeMotion = false;      // fix barycentre
 
         ap.setCalendar( jd );
-        
-        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );        
+
+        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
         nbodies++;
-    }        
-    
+    }
+
     // this used to read Orbit3D csv file of planet state vectors
     SolarSystemApollo11( Dynamics a, String fn ) {
         super( a, fn );
         this.ap = a;
     }
-    
-    
-    void createMaps() {        
+
+
+    void createMaps() {
         // create maps
-        for ( int n=0; n<ap.nPlanets; n++ ) {                        
+        for ( int n=0; n<ap.nPlanets; n++ ) {
             bmap[n] = new Map( ap, n, ssbody[n][ERADIUS]*1000.0 );
-        }        
+        }
     }
-    
-             
+
+
     void moveEuler( double dt ) {
         int n;
-        
-        for ( n=0; n<nbodies; n++ ) {
-            b[n].zero_acceleration();
-        }    
 
         for ( n=0; n<nbodies; n++ ) {
-            b[n].add_gravitational_acceleration();    
+            b[n].zero_acceleration();
+        }
+
+        for ( n=0; n<nbodies; n++ ) {
+            b[n].add_gravitational_acceleration();
             b[n].add_damping_acceleration();
-        }    
+        }
 
         for ( n=0; n<nties; n++ ) {
             t[n].add_elastic_accelerations(b);
-        } 
-        
+        }
+
         for ( n=0; n<nbodies; n++ ) {
             if ( b[n].inFreeMotion ) {
                 b[n].new_speed( dt );
@@ -357,13 +357,13 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
                 b[n].currentState.vy = 0;
                 b[n].currentState.vz = 0;
             }
-        }    
+        }
 
         for ( n=0; n<nbodies; n++ ) {
             b[n].new_position( dt );
-        }        
+        }
     }
-    
+
     void setAllSiderealClocks( double elapsed_time  ) {
         for ( int n=1; n<nbodies; n++ ) {
             b[n].siderealClock = elapsed_time % b[n].siderealDay;
@@ -371,42 +371,42 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
     }
 
 
-  
+
     void paint( Graphics g ) {
         int n;
-                
-        // paint bodies 
+
+        // paint bodies
         for ( n=0; n<nbodies; n++ ) {
             b[n].paint( g );
-        }    
+        }
 
         // paint ties
         for ( n=0; n<nties; n++ ) {
             t[n].paint( g );
-        } 
-        
+        }
+
         this.bmap[ ap.centralBody ].paint( g );
-        
-    }    
-    
+
+    }
+
     double km_m( double v ) {
         return( 1000.0 * v );
     }
-    
+
     void setAxialRotationParams() {
         int n;
         int nmax = nbodies;
         if ( nmax > 10 ) nmax = 10;
-            
+
         // set up Earth axes first
         setAxialRotationParams( 4 );
-        
+
         // then do all other planet axes
-        for ( n=0; n<nmax; n++ ) { 
+        for ( n=0; n<nmax; n++ ) {
             setAxialRotationParams( n );
-        }        
+        }
     }
-    
+
     void setAxialRotationParams( int n ) {
         double ra, dec;
         StateVector v = new StateVector();
@@ -414,7 +414,7 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         StateVector vz = new StateVector( 0, 0, 1000, 0, 0, 0);
         StateVector vx = new StateVector( 1000, 0, 0, 0, 0, 0);
         StateVector s = new StateVector();
-        
+
 
             b[n].axial[0] = axialRotation[n][0];
             b[n].axial[1] = axialRotation[n][1];
@@ -428,12 +428,12 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
             b[n].axial[2] = v.x;
             b[n].axial[3] = v.y;
             b[n].axial[4] = v.z;
-            
+
             b[n].rotationPeriod = axialRotation[n][5] * 60.0 * 60.0;            // seconds
 
-            s = Mathut.barycentricXYZ_to_RADec( b[4], v ); 
-            
-            // use north or positive pole xyz to find rotation angles from +z axis 
+            s = Mathut.barycentricXYZ_to_RADec( b[4], v );
+
+            // use north or positive pole xyz to find rotation angles from +z axis
             double alpha = Math.atan2( v.y, v.z );                  // north pole y / z
             double h = Math.sqrt( v.y*v.y + v.z*v.z );              // h = sqrt( y*y + z*z )
             double beta = Math.atan2( v.x, h );                     // north pole x / h
@@ -445,10 +445,10 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
             b[n].axial[10] = Math.cos(beta);
 
     }
-    
+
     void setAxialRotationParams( int n, double ra, double dec ) {
         StateVector m = new StateVector();
-        
+
             b[n].axial[0] = ra;
             b[n].axial[1] = dec;
             ra = ra / 15.0;        // convert degrees to hours
@@ -457,8 +457,8 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
             b[n].axial[2] = m.x;                    // barycentric XYZ of planet axial N pole
             b[n].axial[3] = m.y;
             b[n].axial[4] = m.z;
-            
-            // use north pole xyz to find rotation angles from +z axis 
+
+            // use north pole xyz to find rotation angles from +z axis
             double alpha = Math.atan2( m.y, m.z );                  // north pole y / z
             double h = Math.sqrt( m.y*m.y + m.z*m.z );              // h = sqrt( y*y + z*z )
             double beta = Math.atan2( m.x, h );                     // north pole x / h
@@ -469,7 +469,6 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
             b[n].axial[9] = Math.sin(beta);
             b[n].axial[10] = Math.cos(beta);
 
-    }   
-    
-}
+    }
 
+}

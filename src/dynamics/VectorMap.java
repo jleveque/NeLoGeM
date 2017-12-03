@@ -14,7 +14,7 @@ import java.awt.Graphics;
 public class VectorMap extends Body {
     Dynamics ap;
     int bnum;
-    
+
     Body body;
     boolean mapPresent = false;
     int mapSize = 2000;
@@ -29,16 +29,16 @@ public class VectorMap extends Body {
     StateVector eyeXYZ;                                     // eye barycentric XYZ
     StateVector earthXYZ;                                   // eye barycentric XYZ
     double horizonDistance;
-    
-    
+
+
     // default constructor
     VectorMap() {
-    }    
+    }
 
     VectorMap( Dynamics a) {
         this.ap = a;
-    }    
-    
+    }
+
     // read in planet vectorMap
     VectorMap( Dynamics a, int bnum ) {
         this.ap = a;
@@ -51,14 +51,14 @@ public class VectorMap extends Body {
             vector[n] = simpleEarthMap.readNextRow();
         }
         vpoints = nrows;
-        
+
         mapPresent = true;
         createFlyVectorMap( );
         setColorPalette();
 
     }
-    
-    // create XYZ axes vectorMap at lat-long-rmul on planet b0 
+
+    // create XYZ axes vectorMap at lat-long-rmul on planet b0
     VectorMap( Dynamics a, int b0, double lat, double lon, double rmul, double scale ) {
         this.ap = a;
         this.bnum = b0;
@@ -70,18 +70,18 @@ public class VectorMap extends Body {
         }
 
         vpoints = nVectors;
-        
+
         mapPresent = true;
         createFlyVectorMap( );
         setColorPalette();
-              
+
     }
 
-    // create a latitude-longitude vector map, maybe including tropics and degree labels 
+    // create a latitude-longitude vector map, maybe including tropics and degree labels
     VectorMap( Dynamics a, double mapRadius, double degreeStep, boolean tropics, boolean textOn ) {
         int i, j, m, n, nsteps, nhalfsteps;
         double x, y, z, vectorStepAngle, vectorHalfStepAngle, latitude, angle;
-        
+
         ap = a;
         sunXYZ = new StateVector(  );
         earthXYZ = new StateVector(  );
@@ -94,11 +94,11 @@ public class VectorMap extends Body {
         vectorHalfStepAngle =  vectorStepAngle * 0.5;
         y = mapRadius * Math.cos( vectorHalfStepAngle );
         z = mapRadius * Math.sin( vectorHalfStepAngle );
-        
+
         i = 0;
         vector[i] = new StateVector( 0, 0, 0, 0, 0, 0 );     // vector[0] is centre of mapped body
         i++;
-        vector[i] = new StateVector( 0, -mapRadius, 0, 0, -y, z );     
+        vector[i] = new StateVector( 0, -mapRadius, 0, 0, -y, z );
         i++;
 
         for ( n=1; n<nhalfsteps; n++ ) {
@@ -107,16 +107,16 @@ public class VectorMap extends Body {
             vector[i].colour = 1;
             i++;
         }
-            
-        for( n=1; n<nsteps; n++ ) {  
+
+        for( n=1; n<nsteps; n++ ) {
             angle = (double)n * vectorStepAngle;
             for ( j=0; j<nhalfsteps; j++ ) {
-                vector[i] = Mathut.transformAroundZaxis( vector[j], angle );        
+                vector[i] = Mathut.transformAroundZaxis( vector[j], angle );
                 vector[i].colour = 1;
                 i++;
-            }   
+            }
         }
-      
+
         StateVector v = new StateVector();
         for ( m=0; m<nsteps; m++ ) {
             if ( m > 0 ) {
@@ -124,7 +124,7 @@ public class VectorMap extends Body {
                 x = mapRadius * Math.cos( latitude ) * Math.sin( vectorStepAngle );
                 y = mapRadius * Math.cos( latitude ) * Math.cos( vectorStepAngle );
                 z = mapRadius * Math.sin( latitude );
-                vector[i] = new StateVector( x, y, z, 0, 0, 0 );        
+                vector[i] = new StateVector( x, y, z, 0, 0, 0 );
                 v = Mathut.transformAroundZaxis( vector[i], vectorHalfStepAngle );
                 vector[i].vx = v.x;
                 vector[i].vy = v.y;
@@ -139,11 +139,11 @@ public class VectorMap extends Body {
             }
         }
         vpoints = i;
-        
+
         createFlyVectorMap( );
         setColorPalette();
     }
-    
+
     void setColorPalette() {
         colorpalette[0] = new Color(255, 255, 255);
         colorpalette[1] = new Color(200, 200, 200);
@@ -156,7 +156,7 @@ public class VectorMap extends Body {
         colorpalette[8] = Color.blue;
         colorpalette[9] = Color.cyan;
     }
-    
+
     // create the set of vectors which will hold the updated map coordinates
     // produced on the fly at runtime.
     void createFlyVectorMap( ) {
@@ -165,16 +165,16 @@ public class VectorMap extends Body {
             flyVector[n].vtype = 1;
         }
     }
-  
+
     // spin and tilt the vector map, and store in flyVector map..
     void spinAndTiltVectorMap( Body b0 ) {
         double rotate, fd;
         int j;
 
         fd = b0.siderealClock / b0.siderealDay;
-        rotate = ( fd * 360.0 ) * Mathut.degreesToRadians;   // map longitude rotation angle (radians)        
-//      ob = b0.obliquity * Mathut.degreesToRadians;         // map obliquity rotation angle (radians) 
-        
+        rotate = ( fd * 360.0 ) * Mathut.degreesToRadians;   // map longitude rotation angle (radians)
+//      ob = b0.obliquity * Mathut.degreesToRadians;         // map obliquity rotation angle (radians)
+
         for (j=0; j<vpoints; j++) {                                                 // was j<vpoints-1 aug 2016
             flyVector[j] = Mathut.staticXYZ_to_relativeXYZ( rotate, b0, vector[j] );
             flyVector[j].colour = vector[j].colour;
@@ -182,28 +182,28 @@ public class VectorMap extends Body {
         }
 
     }
-    
+
     void paint( Graphics g, Color color ) {
 
         ap.offGraphics.setPaintMode();
-        ap.offGraphics.setColor( color );    
-        for (int j=0; j<vpoints; j++) {                                                 
+        ap.offGraphics.setColor( color );
+        for (int j=0; j<vpoints; j++) {
             if ( flyVector[j].z > 0 ) {
                 ap.offGraphics.drawLine( (int)Mathut.x_t( ap, flyVector[j].x ), (int)Mathut.y_t( ap, flyVector[j].y ), (int)Mathut.x_t( ap, flyVector[j].vx ), (int)Mathut.y_t( ap, flyVector[j].vy ) );
-            } 
+            }
         }
-    }    
-    
+    }
+
     void paint( Graphics g ) {
 
         ap.offGraphics.setPaintMode();
-        ap.offGraphics.setColor( Color.lightGray );    
-        for (int j=0; j<vpoints; j++) {                                                 
+        ap.offGraphics.setColor( Color.lightGray );
+        for (int j=0; j<vpoints; j++) {
             if ( flyVector[j].z > 0 ) {
-                if ( flyVector[j].colour > 0 ) ap.offGraphics.setColor( colorpalette[flyVector[j].colour] ); 
+                if ( flyVector[j].colour > 0 ) ap.offGraphics.setColor( colorpalette[flyVector[j].colour] );
                 ap.offGraphics.drawLine( (int)Mathut.x_t( ap, flyVector[j].x ), (int)Mathut.y_t( ap, flyVector[j].y ), (int)Mathut.x_t( ap, flyVector[j].vx ), (int)Mathut.y_t( ap, flyVector[j].vy ) );
-            } 
+            }
         }
-    }    
-    
+    }
+
 }

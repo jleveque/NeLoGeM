@@ -9,14 +9,14 @@ package dynamics;
  * @author CFD
  */
 public class EarthMap extends VectorMap {
-    
+
     int nrows;
     int ncols;
     int currentRow;
 //  StateVector vector[] = new StateVector[ 2000 ];
-            
-  
-    double earthMap[][] = { 
+
+
+    double earthMap[][] = {
     // x, y, z, vx, vy, vz (metres from centre)
     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  },
     { -6011328.094664774, -2739520.0433594054, 2339355.522071642, -6011328.094664774, -2739520.0433594054, 2339355.522071642,  },
@@ -1139,26 +1139,26 @@ public class EarthMap extends VectorMap {
     { 1766809.1389728333, 3212884.0310852923, 5210137.242850633, 1779574.299886377, 3202918.2425902137, 5211928.47826663,  },
     { 1779574.299886377, 3202918.2425902137, 5211928.47826663, 1786785.3161598153, 3197337.9514005296, 5212887.556680034,  },
     { 1786785.3161598153, 3197337.9514005296, 5212887.556680034, 1786785.3161598153, 3197337.9514005296, 5212887.556680034,  },
-    };    
-    
+    };
+
      EarthMap() {
         nrows = earthMap.length;
         ncols = earthMap[0].length;
-        
+
 //      System.out.println( "EarthMap " + earthMap[0][0] + " " + earthMap[1][0] + " " + earthMap[2][0] + " "   );
         currentRow = 0;
-     }  
-     
+     }
+
      int findNrows() {
          return( nrows );
      }
-     
+
      StateVector readNextRow() {
          StateVector v = new StateVector();
          v = new StateVector( earthMap[currentRow][0], earthMap[currentRow][1], earthMap[currentRow][2], earthMap[currentRow][3], earthMap[currentRow][4], earthMap[currentRow][5] );
          currentRow++;
          return( v );
      }
-       
-       
+
+
 }

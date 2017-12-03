@@ -13,18 +13,18 @@ import java.awt.Graphics;
  * @author CFD
  */
 public class Body {
-    
+
 /*
- * Body class refers to individual bodies 
- */    
-    
+ * Body class refers to individual bodies
+ */
+
     static int uniqueNumber = 0;
     int unique;
     int objectType = 1;
     Dynamics ap;
 
     int num;                                                                    // body number
-    String name;                                                                // body name 
+    String name;                                                                // body name
     int status;
     boolean activated;
     boolean inFreeMotion;
@@ -40,22 +40,22 @@ public class Body {
     double damping = 0.00;                                                      // a value of 1.85 gives 53 m/s terminal velocity in sea level air
     double axial[] = new double[12];                                            // planet spin axis data
     double siderealDay;
-    double siderealClock;                                                       // duplicate of ap siderealClock    
+    double siderealClock;                                                       // duplicate of ap siderealClock
     double rotationPeriod;
     double skipRadius;
-    
+
     /* default constructor */
-    public Body(){}    
-    
+    public Body(){}
+
     /* body constructor - MKS units */
     public Body( Dynamics a, int bn, double jd, double x, double y, double z, double vx, double vy, double vz, double bm, double radius, boolean ifm ) {
-        this.unique = uniqueNumber++;  
+        this.unique = uniqueNumber++;
         this.ap = a;
         this.currentState = new StateVector( x, y, z, vx, vy, vz );
         this.num = bn;
         this.m = bm;
         this.r = radius;
-        this.inFreeMotion = ifm;        
+        this.inFreeMotion = ifm;
 
 //      setBodyCharacteristics(  name, x, y, z, vx, vy, vz, m, ifm );
 
@@ -63,11 +63,11 @@ public class Body {
 
         this.status = 3;
         this.activated = true;
-    }    
-    
+    }
+
     /* body constructor - MKS units */
     public Body( Dynamics a, int bn, StateVector v, double bm, double radius, boolean ifm ) {
-        this.unique = uniqueNumber++;  
+        this.unique = uniqueNumber++;
         this.ap = a;
         this.currentState = new StateVector( 0, 0, 0, 0, 0, 0 );
         currentState.copyStateVectors( v );
@@ -75,15 +75,15 @@ public class Body {
         this.num = bn;
         this.m = bm;
         this.r = radius;
-        this.inFreeMotion = ifm;        
+        this.inFreeMotion = ifm;
 
 //      for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
         lastState = new StateVector();
 
         this.status = 3;
         this.activated = true;
-    }    
-    
+    }
+
     void setBodyCharacteristics(  String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm ) {
         this.name = name;
         this.m = m;
@@ -95,15 +95,15 @@ public class Body {
         this.currentState.vx = vx;
         this.currentState.vy = vy;
         this.currentState.vz = vz;
-        this.inFreeMotion = ifm;        
+        this.inFreeMotion = ifm;
     }
 
     // centralBody is current planet selected to be viewed
     void paint( Graphics g ) {
         double lx, ly, lz, rpixels;
-        
+
         ap.offGraphics.setPaintMode();
-        ap.offGraphics.setColor( Color.blue  );    
+        ap.offGraphics.setColor( Color.blue  );
         lx = this.currentState.x - ap.ss.b[ ap.centralBody ].currentState.x;    // paint relative to central body
         ly = this.currentState.y - ap.ss.b[ ap.centralBody ].currentState.y;
         lz = this.currentState.z - ap.ss.b[ ap.centralBody ].currentState.z;
@@ -111,13 +111,13 @@ public class Body {
         rpixels = l_t ( this.r );
         if ( rpixels < 2 ) {
             if ( this.num == 11 ) {
-                ap.offGraphics.setColor( Color.red  );    
+                ap.offGraphics.setColor( Color.red  );
      //         System.out.println( "b11 rel XYZ km " + lx/1000.0 + ", " + ly/1000.0 + ", " + lz/1000.0 + " XYpix " + (int)x_t( lx ) + ", " +  (int)y_t( ly ) );
             }
             // draw point
-            ap.offGraphics.drawLine( (int)x_t( lx ), (int)y_t( ly ), (int)x_t( lx ), (int)y_t( ly ) ); 
-//          ap.offGraphics.drawLine( (int)x_t( lx )-1, (int)y_t( ly ), (int)x_t( lx )+1, (int)y_t( ly ) ); 
-//          ap.offGraphics.drawLine( (int)x_t( lx ), (int)y_t( ly )-1, (int)x_t( lx ), (int)y_t( ly )+1 ); 
+            ap.offGraphics.drawLine( (int)x_t( lx ), (int)y_t( ly ), (int)x_t( lx ), (int)y_t( ly ) );
+//          ap.offGraphics.drawLine( (int)x_t( lx )-1, (int)y_t( ly ), (int)x_t( lx )+1, (int)y_t( ly ) );
+//          ap.offGraphics.drawLine( (int)x_t( lx ), (int)y_t( ly )-1, (int)x_t( lx ), (int)y_t( ly )+1 );
         } else {
             // draw circle around centralBody
             int circlePoints = 24;
@@ -127,15 +127,15 @@ public class Body {
             StateVector circlePoint = new StateVector( x0, y0, 0, x0, y0, 0 );
             circlePoint = Mathut.transformAroundZaxis( circlePoint, stepAngle );
             circlePoint.x = x0;
-            circlePoint.y = y0;            
+            circlePoint.y = y0;
 
             for (int n=0; n<circlePoints; n++ ) {
                 ap.offGraphics.drawLine( (int)x_t( circlePoint.x + lx), (int)y_t( circlePoint.y + ly ), (int)x_t( circlePoint.vx + lx ), (int)y_t( circlePoint.vy + ly ) );
-                circlePoint = Mathut.transformAroundZaxis( circlePoint, stepAngle );                
+                circlePoint = Mathut.transformAroundZaxis( circlePoint, stepAngle );
             }
         }
     }
-    
+
     // x transformation to screen coordinates
     int x_t(double x ) {
         return (int) ( ap.screenXYscale * x + ap.screenXoffset);
@@ -150,7 +150,7 @@ public class Body {
     int l_t(double l ) {
         return (int) ( ap.screenXYscale * l);
     }
-    
+
     /**********start Euler Approximation***********************************************************************/
 
     // Reset acceleration to zero
@@ -181,12 +181,12 @@ public class Body {
                     this.currentState.ax = this.currentState.ax + a * x / r;     // x component of accel
                     this.currentState.ay = this.currentState.ay + a * y / r;     // y component of accel
                     this.currentState.az = this.currentState.az + a * z / r;     // z component of accel
-                }                  
+                }
             }
-            
-        }    
+
+        }
     }
-  
+
     // Calculate accelerations due to damping forces proportional to velocity.
     public void add_damping_acceleration() {
       this.currentState.ax = this.currentState.ax - this.currentState.vx * damping / this.m;
@@ -207,11 +207,8 @@ public class Body {
         this.currentState.x = this.currentState.x + this.currentState.vx * t;         // new x
         this.currentState.y = this.currentState.y + this.currentState.vy * t;         // new y
         this.currentState.z = this.currentState.z + this.currentState.vz * t;         // new z
-    }    
+    }
 
-    /********** end Euler Approximation***********************************************************************/       
-    
+    /********** end Euler Approximation***********************************************************************/
+
 }
-
-
-

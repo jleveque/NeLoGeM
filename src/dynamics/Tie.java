@@ -13,7 +13,7 @@ import java.awt.Graphics;
  * @author CFD
  */
 public class Tie {
-    
+
 
 // elastic ties connect bodies
     static int uniqueNumber = 0;
@@ -27,22 +27,22 @@ public class Tie {
     int num;                        // tied body number
     Body b1;                      // end body 1
     Body b2;                      // end body 2
-    double tie_length;           // tie current length    
+    double tie_length;           // tie current length
     double tie_free_length;      // tie free length
     double tie_max_length;       // tie maximum length
     double tie_K;                // tie spring constant
     double tension;              // tie tension
     double extension;            // tie extension
     boolean paint_it;
-    Color tie_colour;            // tie colour    
+    Color tie_colour;            // tie colour
 
     // explicit default constructor
     public Tie() {  }
 
 
     public Tie( Dynamics a, int n, Body n1, Body n2, double fmax, double k ){
-      this.unique = uniqueNumber++;  
-      this.exists = true;  
+      this.unique = uniqueNumber++;
+      this.exists = true;
       this.snapped = false;
       ap = a;
       this.paint_it = true;
@@ -50,11 +50,11 @@ public class Tie {
       this.b2 = n2;
 
       this.set_tie_length();
-      this.tie_free_length = this.tie_length; 
+      this.tie_free_length = this.tie_length;
       this.tie_max_length = fmax * this.tie_free_length;
 
       this.tie_colour = new Color(  80,  80,  80 );
-      tie_K = k;           
+      tie_K = k;
     }
 
     // break tie
@@ -81,8 +81,8 @@ public class Tie {
 
     // change body at one end of tie
     void changeTieNode( Body oldb, Body newb ) {
-        if ( this.b1 == oldb ) this.b1 = newb; 
-        if ( this.b2 == oldb ) this.b2 = newb; 
+        if ( this.b1 == oldb ) this.b1 = newb;
+        if ( this.b2 == oldb ) this.b2 = newb;
     }
 
     // Calculate accelerations due to tie tension/compression.
@@ -111,21 +111,21 @@ public class Tie {
         this.b2.currentState.az = this.b2.currentState.az - (f * lz)/(r * this.b2.m);    // z component of accel
 
     }
-   
+
     // paint method draws tie as a line.
     // blue in tension, red in compression
     public void paint( Graphics g ) {
         int x, y, z, x1, y1, x2, y2, ci;
 
         ap.offGraphics.setPaintMode();
-        if ( this.tension < 0 ) { 
+        if ( this.tension < 0 ) {
             ap.offGraphics.setColor( Color.blue );
         } else {
             ap.offGraphics.setColor( Color.red );
         }
-        
+
         ap.offGraphics.drawLine( (int)x_t( b1.currentState.x ), (int)y_t( b1.currentState.y ), (int)x_t( b2.currentState.x ), (int)y_t( b2.currentState.y ) );
-        
+
     }
 
     // x transformation to screen coordinates
@@ -142,8 +142,5 @@ public class Tie {
     int l_t(double l ) {
         return (int) ( ap.screenXYscale * l);
     }
-    
+
 }
-
-
-
