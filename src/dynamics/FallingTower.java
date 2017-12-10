@@ -40,8 +40,8 @@ public class FallingTower extends Process{
         this.bref = ref;
 
         screenXYscale =  200000.0 * 10.0/1E11;
-        screenXoffset = ap.xmax / 2.0;
-        screenYoffset = ap.ymax / 2.0;
+        screenXoffset = ap.canvasSize.width / 2.0;
+        screenYoffset = ap.canvasSize.height / 2.0;
 
         createStructure( 500000, 500000, 500000 );
 

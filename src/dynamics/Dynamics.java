@@ -8,10 +8,12 @@ package dynamics;
  *
  * @author CFD
  */
-import java.awt.*;
-import java.util.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -19,17 +21,23 @@ import java.lang.Math;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 import java.io.FileReader;
+import javax.swing.*;
 
 
-public class Dynamics extends java.applet.Applet implements Runnable {
-    int option =    4;
-    Dimension appletSize;
-    private Thread testThread = null;
-    int xmax, ymax, count;
-    Image offImage;
+public class Dynamics extends JFrame implements Runnable, MouseListener, WindowListener {
+    int option = 11;
+
+    JPanel canvas;
+    BufferedImage offImage;
     Graphics offGraphics;
+
+    Dimension canvasSize;
+
+    private Thread testThread = null;
+
     boolean go = true;
     boolean clearScreen = false;
+    int count;
     int centralBody =   4;
     double screenXoffset, screenYoffset, screenXYscale;
     double dt =  16.0;
@@ -60,28 +68,10 @@ public class Dynamics extends java.applet.Applet implements Runnable {
     int nPlanets;
 
 
-    public void init() {
+    Dynamics() {
         go = true;
-        this.enableEvents( AWTEvent.MOUSE_EVENT_MASK );
 
-        setSize(400, 400);
-        setBackground(Color.white);
-
-        appletSize = this.getSize();
-        xmax = appletSize.width;         // graphics width
-        ymax = appletSize.height;        // graphics height
-
-        screenXYscale =    4500.0 * 10.0/1E11;
-//      screenXYscale = 1.0 * 10.0/1E11;
-        screenXoffset = xmax / 2.0;
-        screenYoffset = ymax / 2.0;
-
-
-        offImage = createImage( xmax, ymax );
-        offGraphics = offImage.getGraphics();
-
-        selectOption();
-
+        // ss = new SolarSystem( this );
         ss = new SolarSystemApollo11( this );
 //      ss = new SolarSystemTestbed( this );
         tetra = new Tetrahedron( this );
@@ -92,6 +82,65 @@ public class Dynamics extends java.applet.Applet implements Runnable {
 
 //      System.out.println( 7.023694035922034E+07 - 7.023698945180266E7  );
 //      ss.setupTest();
+
+        this.addWindowListener(this);   // Register this class as a window event listener
+        this.addMouseListener(this);    // Register this class as a mouse event listener
+
+        canvasSize = new Dimension(400, 400);
+
+        offImage = new BufferedImage(canvasSize.width,
+                                     canvasSize.height,
+                                     BufferedImage.TYPE_INT_RGB);
+        offGraphics = offImage.getGraphics();
+        offGraphics.setColor(Color.white);
+        offGraphics.fillRect(0, 0, canvasSize.width, canvasSize.height);
+
+        // Create a JPanel object for drawing on
+        canvas = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                offGraphics.setPaintMode();
+                if ( clearScreen ) {
+                    offGraphics.setColor( Color.white );
+                    offGraphics.fillRect( 0, 0, canvasSize.width, canvasSize.height );
+                }
+
+                offGraphics.setColor( Color.black );
+
+                if ( option != 10 ) {
+                    ss.paint(g);
+                    tetra.paint(g);
+                } else {
+                    if ( count > 6 ) {
+                        ft1.paint(g);
+                    }
+                }
+
+                offGraphics.setColor( Color.black );
+                offGraphics.drawString( currentDate, 5, canvasSize.height-10);
+
+                g.drawImage(offImage, 0, 0, null);
+            }
+        };
+
+        canvas.setPreferredSize(canvasSize);
+
+        // Configure the window (JFrame)
+        this.setTitle("NeLoGeM Orbital Simulation Model");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setContentPane(canvas);
+        this.pack();  // Size the JFrame so that all its contents are at or above their preferred sizes
+        this.setLocationRelativeTo(null);  // Create window centered on screen
+        this.setVisible(true);
+
+        screenXYscale =    4500.0 * 10.0/1E11;
+//      screenXYscale = 1.0 * 10.0/1E11;
+        screenXoffset = canvasSize.width / 2.0;
+        screenYoffset = canvasSize.height / 2.0;
+
+        selectOption();
     }
 
     public void start() {
@@ -100,17 +149,6 @@ public class Dynamics extends java.applet.Applet implements Runnable {
             testThread.start();
         }
     }
-
-    public void processMouseEvent( MouseEvent e) {
-
-        if ( e.getID() == MouseEvent.MOUSE_ENTERED ) { go =  false; }
-        else if ( e.getID() == MouseEvent.MOUSE_EXITED ) { go =  true; }
-        else if ( e.getID() == MouseEvent.MOUSE_RELEASED ) {
-            go =  true;
-        }
-        else super.processMouseEvent(e);
-    }
-
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -160,38 +198,6 @@ public class Dynamics extends java.applet.Applet implements Runnable {
                 Thread.sleep(50);
             } catch (InterruptedException e){ }
         }
-    }
-
-    public void paint(Graphics g) {
-        update(g);
-    }
-
-    public void update(Graphics g) {
-
-        offGraphics.setPaintMode();
-        if ( clearScreen ) {
-            offGraphics.setColor( Color.white );
-            offGraphics.fillRect( 0, 0, xmax, ymax );
-        }
-
-        offGraphics.setColor( Color.black );
-
-        if ( option != 10 ) {
-            ss.paint(g);
-            tetra.paint(g);
-            if ( count > 6 ) {
-                ft1.paint(g);
-            }
-        } else {
-            if ( count > 6 ) {
-                ft1.paint(g);
-            }
-        }
-
-        offGraphics.setColor( Color.black );
-        offGraphics.drawString( currentDate, 5, ymax-10);
-
-        g.drawImage( offImage, 0, 0, this );
     }
 
     public void stop() {
@@ -379,6 +385,59 @@ public class Dynamics extends java.applet.Applet implements Runnable {
             dt = 128.0;
             screenXYscale =    200000.0 * 10.0/1E11;
         }
+    }
+
+    // MouseListener implementation
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+
+    @Override
+    public void mousePressed(MouseEvent e) { }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        go = true;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        go = false;
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        go = true;
+    }
+
+    // WindowListener implementation
+    @Override
+    public void windowClosing(WindowEvent e) {
+        dispose();
+        System.exit(0); // Normal exit of program
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) { }
+
+    @Override
+    public void windowClosed(WindowEvent e) { }
+
+    @Override
+    public void windowIconified(WindowEvent e) { }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) { }
+
+    @Override
+    public void windowActivated(WindowEvent e) { }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) { }
+
+    public static void main(String[] args) {
+        Dynamics d = new Dynamics();
+
+        d.start();
     }
 }
 
