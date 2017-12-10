@@ -13,7 +13,7 @@ import java.awt.Graphics;
  */
 public class SolarSystemApollo11 extends Process{
 
-//  Dynamics ap;
+    public StateVector state[] = new StateVector[1000];                    // body states for RK4
 
 /*
 Apollo 11 S-IVB
@@ -244,7 +244,6 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         { 8, 0, 8.6824683933763012819043797233395E25, 25362.0, 25362.0, 90, 0, 0, 0, 2440419.194479167, -2.731823625809680E+09, -1.858544690681215E+08,  3.476510714276076E+07,  4.116629160582377E-01, -7.112252550218088E+00, -3.182262258414470E-02, },
         { 9, 0, 1.0243763726603912365620370237477E26, 24624.0, 24624.0, 90, 0, 0, 0, 2440419.194479167, -2.394403728893961E+09, -3.850110609895716E+09,  1.344396847873490E+08,  4.581475724820936E+00, -2.839643433710780E+00, -4.774491231976929E-02, },
         { 10, 0, 7.347075E22, 1737.53, 1727.53, 90, 0, 0, 0, 2440419.194479167,  6.313672400814780E+07, -1.380826192727806E+08,  2.445887219801545E+03,  2.600904780466872E+01,  1.147458454512634E+01, -6.957265739587015E-02, },
-//      { 11, 0, 1000.0, 0.01, 0.01, 90, 0, 0, 0, 2440419.194479167,  6.343499939926510E+07, -1.383448940239173E+08, -1.693750687410682E+04,  2.085980004925432E+01,  1.835087874228012E+01,  7.745846007922585E-01,  5.076677773007958E+02,  1.521949708044022E+08, -7.986611412721560E+00, }
     };
     final int BNUM = 0;         // body number ( Sun=1, Mercury=2 ... Luna=10 )
     final int UNUSED = 1;
@@ -299,6 +298,8 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         int ncols = ssbody[0].length;
         StateVector s;
 
+        for ( int n=0; n<1000; n++ ) state[n] = new StateVector();
+
         for ( int n=0; n<nrows; n++ ) {
             jd = ssbody[n][JDCT];
             s = new StateVector( km_m(ssbody[n][X]), km_m(ssbody[n][Y]), km_m(ssbody[n][Z]), km_m(ssbody[n][VX]), km_m(ssbody[n][VY]), km_m(ssbody[n][VZ]) );
@@ -314,8 +315,9 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
 
         ap.setCalendar( jd );
 
-        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
-        nbodies++;
+        // add Apollo11 S-IVB rocket
+//      b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
+//      nbodies++;
     }
 
     // this used to read Orbit3D csv file of planet state vectors
@@ -336,6 +338,12 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
     void moveEuler( double dt ) {
         int n;
 
+    //  System.out.println( "ss nbodies " + nbodies );
+
+        RK4.moveRK4(ap, b, nbodies, state, dt);
+//      Euler.moveEuler(ap, b, nbodies, dt);
+
+    /*
         for ( n=0; n<nbodies; n++ ) {
             b[n].zero_acceleration();
         }
@@ -362,6 +370,8 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         for ( n=0; n<nbodies; n++ ) {
             b[n].new_position( dt );
         }
+
+    */
     }
 
     void setAllSiderealClocks( double elapsed_time  ) {
@@ -472,3 +482,4 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
     }
 
 }
+

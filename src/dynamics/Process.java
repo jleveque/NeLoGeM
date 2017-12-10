@@ -190,38 +190,15 @@ public class Process {
     void moveEuler( double dt ) {
         int n, m;
 
-
-        for ( n=0; n<nbodies; n++ ) {
-            b[n].zero_acceleration();
-        }
-
-        for ( n=0; n<nbodies; n++ ) {
-            b[n].add_gravitational_acceleration();
-            b[n].add_damping_acceleration();
-        }
-
-        for ( n=0; n<nties; n++ ) {
-            t[n].add_elastic_accelerations(b);
-        }
-
-        for ( n=0; n<nbodies; n++ ) {
-            if ( b[n].inFreeMotion ) {
-                b[n].new_speed( dt );
-            } else {
-                b[n].currentState.vx = 0;
-                b[n].currentState.vy = 0;
-                b[n].currentState.vz = 0;
-            }
-        }
-
-        for ( n=0; n<nbodies; n++ ) {
-            b[n].new_position( dt );
-        }
+//      System.out.println("euler " + nbodies);
+        Euler.moveEuler(ap, b, nbodies, dt);
 
     }
 
     void paint( Graphics g ) {
         int n;
+
+//      System.out.println("euler paint " + nbodies);
 
         // paint bodies
         for ( n=0; n<nbodies; n++ ) {
@@ -235,3 +212,6 @@ public class Process {
     }
 
 }
+
+
+

@@ -14,45 +14,50 @@ public class RK4 {
 
 
 
-/*
- * RK4 class carries out RK4 motion calculations on all Bodies in Pool using static methods
+// RK4 class carries out RK4 motion calculations on all Bodies in Pool using static methods
 
-class RK4{
-
-    public static Pool pool;
+    public static Dynamics ap;
+//  public static Pool pool;
     public static Body body;            // pool body under consideration
 
-    public static void moveRK4( Pool p, double dt ) {
+    // adapted from OrbitNin.java
+    // b[] array contains nbodies from Solar System ss or elsewhere
+    // state[] is a temporary array
+    // gravitational accelerations are only calculated using Solar System bodies
+    public static void moveRK4( Dynamics a, Body[] b, int nbodies, StateVector[] state, double dt ) {
         int m, n;
 
-        pool = p;
+        ap = a;
 
         // don't perform calculations using dt = 0. 19 aug 2016
         if ( dt != 0 ) {
 
             // find straight-line-advanced body locations
-            for (n = 0; n < pool.nbodies; n++) {
-//              if ( pool.b[n].status == 3 ) {
-                    body = pool.b[n];
+            for (n = 1; n < nbodies; n++) {
+                if ( b[n].status == 3 ) {
+//                  System.out.println( nbodies + "b num " + b[n].num );
+                    body = b[n];
+//                  System.out.println( "body num " + body.num );
+//                  System.out.println( body.currentState.x );
                     advanceBody(  dt );
-//              }
+                }
             }
 
             // perform RK4 calculations on current state
-            for (n = 1; n < pool.nbodies; n++) {
-                body = pool.b[n];
+            for (n = 1; n < nbodies; n++) {
+                body = b[n];
                 // here for RK4 acceleration
-                if ( pool.b[n].status == 3 && pool.b[n].activated ) {
-                    pool.state[n].copyStateVectors( pool.b[n].currentState );
-                    pool.state[n] = integrate( pool.state[n], dt );
+                if ( b[n].status == 3 && b[n].activated ) {
+                    state[n].copyStateVectors( b[n].currentState );
+                    state[n] = integrate( state[n], dt );
                 }
             }
 
             // update positions and speeds
-            for (n = 0; n < pool.nbodies; n++) {
-                body = pool.b[n];
-                if ( pool.b[n].status >= 2 && pool.b[n].activated && pool.b[n].inFreeMotion ) {
-                    setVectors( pool.b[n], pool.state[n] );    // RK4
+            for (n = 0; n < nbodies; n++) {
+                body = b[n];
+                if ( b[n].status >= 2 && b[n].activated && b[n].inFreeMotion ) {
+                    setVectors( b[n], state[n] );    // RK4
                 }
             }
 
@@ -60,7 +65,7 @@ class RK4{
     }
 
 
-// RK4 code *************************************************************************************************************
+/* RK4 code *************************************************************************************************************/
 
     // copied from http://gafferongames.com/game-physics/integration-basics/
     // derivatives dx, dv are held as vx, ax in a StateVector.
@@ -111,7 +116,7 @@ class RK4{
 
 
     // RK4 acceleration
-    // Finds acceleration on this body due to all other bodies (> than some minimum mass)
+    // Finds acceleration on this body due to all other bodies
     // Returns this body's current position, speed, and acceleration in a StateVector
     public static StateVector acceleration( StateVector state, int ai ){
         double x, y, z, r, a;
@@ -125,20 +130,20 @@ class RK4{
         acc.ay = 0;
         acc.az = 0;
 
-        for( int n=0; n<pool.nbodies; n++ ) {
-            if ( body.activated && body.inFreeMotion && (n != body.num) && (pool.b[n].status == 3) ) {
+        for( int n=0; n<ap.ss.nbodies; n++ ) {
+            if ( body.activated && body.inFreeMotion && (n != body.num) && (ap.ss.b[n].status == 3) ) {
 
-                x = state.x - pool.b[n].advanced[ai].x;                 // x distance from m
-                y = state.y - pool.b[n].advanced[ai].y;                 // y distance ..   ..
-                z = state.z - pool.b[n].advanced[ai].z;                 // z distance ..   ..
+                x = state.x - ap.ss.b[n].advanced[ai].x;                 // x distance from m
+                y = state.y - ap.ss.b[n].advanced[ai].y;                 // y distance ..   ..
+                z = state.z - ap.ss.b[n].advanced[ai].z;                 // z distance ..   ..
                 r = Math.sqrt(x * x + y * y + z * z);                       // distance   ..   ..
 
                 // only find interactions with massive bodies > 1 kg mass
-                if ( pool.b[n].m > 1.0 )  {
+                if ( ap.ss.b[n].m > 1.0 )  {
 
                     // gravitational accelerations act on bodies if > 5 metres distance (to avoid large accelarations)
-                    if ( pool.b[n].status == 3 && pool.b[n].activated  && ( r > 5.0 ) ) {
-                        a = -(G * pool.b[n].m) / (r * r);                       // acceleration towards that
+                    if ( ap.ss.b[n].status == 3 && ap.ss.b[n].activated  && ( r > 5.0 ) ) {
+                        a = -(G * ap.ss.b[n].m) / (r * r);                       // acceleration towards that
                         acc.ax = acc.ax + a * x / r;                                // x component of accel
                         acc.ay = acc.ay + a * y / r;                                // y component of accel
                         acc.az = acc.az + a * z / r;                                // z component of accel
@@ -174,10 +179,7 @@ class RK4{
 
     }
 
-// end RK4 code ***********************************************************************************************************
-
-}
-*/
+/* end RK4 code ***********************************************************************************************************/
 
 
 

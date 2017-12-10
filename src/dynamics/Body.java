@@ -58,6 +58,7 @@ public class Body {
         this.inFreeMotion = ifm;
 
 //      setBodyCharacteristics(  name, x, y, z, vx, vy, vz, m, ifm );
+        for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
 
         lastState = new StateVector();
 
@@ -77,7 +78,7 @@ public class Body {
         this.r = radius;
         this.inFreeMotion = ifm;
 
-//      for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
+        for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
         lastState = new StateVector();
 
         this.status = 3;
@@ -134,6 +135,8 @@ public class Body {
                 circlePoint = Mathut.transformAroundZaxis( circlePoint, stepAngle );
             }
         }
+
+
     }
 
     // x transformation to screen coordinates
@@ -151,8 +154,8 @@ public class Body {
         return (int) ( ap.screenXYscale * l);
     }
 
-    /**********start Euler Approximation***********************************************************************/
-
+//  /**********start Euler Approximation***********************************************************************/
+/*
     // Reset acceleration to zero
     public void zero_acceleration() {
       this.currentState.ax = 0;
@@ -208,7 +211,11 @@ public class Body {
         this.currentState.y = this.currentState.y + this.currentState.vy * t;         // new y
         this.currentState.z = this.currentState.z + this.currentState.vz * t;         // new z
     }
+*/
+//  /********** end Euler Approximation***********************************************************************/
 
-    /********** end Euler Approximation***********************************************************************/
 
 }
+
+
+

@@ -12,12 +12,12 @@ import java.awt.Graphics;
  *
  * @author CFD
  */
-public class FallingTower {
+public class FallingTower extends Process{
 
-    Dynamics ap;
+//  Dynamics ap;
     ReferenceFrame rf;
-    int bref;                   // reference body on which pendulum is sited
-    int bnum;                   // body number of pendulum
+    int bref;                   // reference body on which tower is sited
+    int bnum;                   // body number
 
     StateVector currentState[] = new StateVector[50];
     StateVector newState[] = new StateVector[50];
@@ -50,13 +50,15 @@ public class FallingTower {
         makeClone();
         barycentricState = rf.transformToBarycentricXYZ( clone, nVectors );
 
-        firstBnum = ap.ss.nbodies;
+        firstBnum = this.nbodies;
         for ( int n=0; n<nVectors; n++ ) {
-            ap.ss.b[ ap.ss.nbodies ] = new Body( ap, ap.ss.nbodies, barycentricState[n], 28.0, 100000.0, true );
-            ap.ss.nbodies++;
+            this.b[ this.nbodies ] = new Body( ap, ap.ss.nbodies, barycentricState[n], 28.0, 100000.0, true );
+            this.nbodies++;
         }
-        lastBnum = ap.ss.nbodies;
+        lastBnum = this.nbodies;
         index = nVectors;
+        System.out.println( "ft1 nbodies " + this.firstBnum + " " + this.lastBnum );
+        System.out.println( "b[8].currentState " + b[8].currentState.x + " " + b[8].currentState.y );
 
     }
 
@@ -69,9 +71,11 @@ public class FallingTower {
         i = firstBnum;
         for ( int n=0; n<nVectors; n++  ) {
             sv[n] = new StateVector();
-            sv[n].copyStateVectors( ap.ss.b[i].currentState );
+            sv[n].copyStateVectors( b[i].currentState );
             i++;
         }
+//      System.out.println( "sv[8] " + sv[8].x + " " + sv[8].y );
+
         // transform barycentric state vectors back to reference frame state vectors
         newState = rf.transformFromBarycentricXYZ( sv, nVectors );
 
@@ -86,6 +90,7 @@ public class FallingTower {
                 }
                 currentState[i].copyStateVectors( newState[i] );
                 currentState[i].flag1 = 0;
+//              if ( i == 8 ) currentState[i].printStateVectorKm();
             }
         }
 
@@ -94,7 +99,7 @@ public class FallingTower {
         int n = firstBnum;
         for ( int m=0; m<nVectors; m++  ) {
             if ( isFixed( currentState[m] ) ) {
-                ap.ss.b[n].currentState.copyStateVectors( barycentricState[m] );
+                b[n].currentState.copyStateVectors( barycentricState[m] );
             }
             n++;
         }
@@ -140,7 +145,8 @@ public class FallingTower {
             clone[n] = this.currentState[n].cloneStateVector();
         }
     }
-
+/*
+    // surface refernece frame view
     void paint( Graphics g ) {
         int x, y, r;
         ap.offGraphics.setPaintMode();
@@ -153,7 +159,7 @@ public class FallingTower {
             ap.offGraphics.drawOval( x, y, r, r );
         }
     }
-
+*/
     // x transformation to screen coordinates
     int x_t( double x ) {
         return (int) ( screenXYscale * x + screenXoffset);
@@ -171,3 +177,4 @@ public class FallingTower {
 
 
 }
+
