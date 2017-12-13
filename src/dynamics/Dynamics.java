@@ -25,7 +25,7 @@ import javax.swing.*;
 
 
 public class Dynamics extends JFrame implements Runnable, MouseListener, WindowListener {
-    int option = 11;
+    int option = 10;
 
     JPanel canvas;
     BufferedImage offImage;
@@ -109,14 +109,13 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
 
                 offGraphics.setColor( Color.black );
 
-                if ( option != 10 ) {
-                    ss.paint(g);
-                    tetra.paint(g);
-                } else {
+                if ( option == 10 || option == 4 ) {
                     if ( count > 6 ) {
                         ft1.paint(g);
                     }
                 }
+                ss.paint(g);
+                tetra.paint(g);
 
                 offGraphics.setColor( Color.black );
                 offGraphics.drawString( currentDate, 5, canvasSize.height-10);
@@ -156,7 +155,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         while (testThread == myThread) {
             if ( go ) {
 /*
-                // i, j are dt and orbit radius indices
+                // i, j are dt and orbit radius indices used in TestBed
                 for ( int j=0; j<3; j++ ) {
                     for ( int i=0; i<3; i++ ) {
                         ss.test( i, j );

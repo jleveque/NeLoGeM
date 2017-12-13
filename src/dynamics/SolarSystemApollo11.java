@@ -316,8 +316,8 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         ap.setCalendar( jd );
 
         // add Apollo11 S-IVB rocket
-//      b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
-//      nbodies++;
+        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
+        nbodies++;
     }
 
     // this used to read Orbit3D csv file of planet state vectors

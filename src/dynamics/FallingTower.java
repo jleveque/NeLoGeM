@@ -146,7 +146,7 @@ public class FallingTower extends Process{
         }
     }
 /*
-    // surface refernece frame view
+    // surface reference frame view. removed 10 dec 2017, restored 13 dec 2017
     void paint( Graphics g ) {
         int x, y, r;
         ap.offGraphics.setPaintMode();
