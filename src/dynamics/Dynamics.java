@@ -25,11 +25,11 @@ import javax.swing.*;
 
 
 public class Dynamics extends JFrame implements Runnable, MouseListener, WindowListener {
-    int option = 10;
+    int option =  4;
 
     JPanel canvas;
     BufferedImage offImage;
-    Graphics offGraphics;
+    Graphics offGraphics, ctlGraphics;
 
     Dimension canvasSize;
 
@@ -48,6 +48,11 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     Process proc;
 //  FoucaultPendulum fp1;
     FallingTower ft1;
+
+    // copied for Eye()
+    int view = 0;                  // 0 = x-y (down z axis), 1 = x-z (down y-axis), 2 = y-z (down x axis)
+    boolean yearRotate = false;   // set true to rotate eye around z axis annually
+    double startJDCT;
 
     double daySecs = 24.0 * 60.0 * 60.0;     // seconds per day
     double elapsedTime = 64800.0 - 197.44;   // elapsed time since simulation start (18hours added to turn Greenwich towards sun on 21 dec 2012)

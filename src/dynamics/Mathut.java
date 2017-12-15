@@ -413,6 +413,41 @@ public class Mathut {
         return ( rotm );
     }
 
+    // transform a body onto z axis with locus at origin
+    public static StateVector transformAroundEye( StateVector v, StateVector loc ) {
+        int j;
+        double angle1, angle2, zangle, l;
+        StateVector locus = new StateVector( loc.x, loc.y, loc.z, loc.vx, loc.vy, loc.vz );
+        zangle = loc.zangle;
+//      System.out.println( "locus.zangle " + locus.zangle);
+
+        // position locus at origin
+        locus.vx = locus.vx - locus.x;
+        locus.vy = locus.vy - locus.y;
+        locus.vz = locus.vz - locus.z;
+        v.x = v.x - locus.x;
+        v.y = v.y - locus.y;
+        v.z = v.z - locus.z;
+        v.vx = v.vx - locus.x;
+        v.vy = v.vy - locus.y;
+        v.vz = v.vz - locus.z;
+
+        // rotate viewed point onto z axis
+        l = Math.sqrt( locus.vx*locus.vx + locus.vz*locus.vz );
+        angle1 = Math.atan2( locus.vx, -locus.vz );
+        angle2 = Math.atan2( locus.vy, l );
+        locus = Mathut.transformAroundYaxis( locus, -angle1);
+        locus = Mathut.transformAroundXaxis( locus, -angle2);
+        v = Mathut.transformAroundYaxis( v, -angle1);
+        v = Mathut.transformAroundXaxis( v, -angle2);
+        v =  Mathut.transformAroundZaxis( v, -zangle );
+
+        return( v );
+    }
+
+
+
+
 
     public static double phaseAngle( StateVector s ) {
         double phaseAngle = Math.atan2( s.y, s.x );
