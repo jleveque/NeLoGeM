@@ -248,7 +248,7 @@ public class Eye {
         dimension.z = (double)(-app.canvasSize.width * 56.0 );
         dimension.ax = (double)(app.canvasSize.width / 2.0);    // x offset of centre from image top left
         dimension.ay = (double)(app.canvasSize.height / 2.0);    // y offset
-        System.out.println( dimension.x + " " + dimension.y + " " + dimension.z );
+        System.out.println( "Eye XYZ dimensions" + dimension.x + " " + dimension.y + " " + dimension.z );
     }
 
 /*

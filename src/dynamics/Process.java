@@ -103,7 +103,7 @@ public class Process {
                         sv.vy = Double.valueOf(rs[9]).doubleValue() * 1000.0;
                         sv.vz = Double.valueOf(rs[10]).doubleValue() * 1000.0;
                         if ( jd < startJulianDate ) startJulianDate = jd;
-                        b[this.nbodies] = new Body( ap, this.nbodies, sv, m, r, true );
+                        b[this.nbodies] = new Body( ap, this.nbodies, sv, m, r, true, true );
                         nbodies++;
                 }
                 rowcount++;
@@ -202,7 +202,11 @@ public class Process {
 
         // paint bodies
         for ( n=0; n<nbodies; n++ ) {
-            b[n].paint( g );
+            if ( ap.option > 0 ) {
+                b[n].paint( g );
+            } else {
+                b[n].paint( g, ap.eye );
+            }
         }
 
         // paint ties

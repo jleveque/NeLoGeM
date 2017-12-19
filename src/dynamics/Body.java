@@ -43,12 +43,15 @@ public class Body {
     double siderealClock;                                                       // duplicate of ap siderealClock
     double rotationPeriod;
     double skipRadius;
+    Map bmap;
+    boolean mapExists = false;
+    boolean paint_it = true;
 
     /* default constructor */
     public Body(){}
 
     /* body constructor - MKS units */
-    public Body( Dynamics a, int bn, double jd, double x, double y, double z, double vx, double vy, double vz, double bm, double radius, boolean ifm ) {
+    public Body( Dynamics a, int bn, double jd, double x, double y, double z, double vx, double vy, double vz, double bm, double radius, boolean ifm, boolean mapped ) {
         this.unique = uniqueNumber++;
         this.ap = a;
         this.currentState = new StateVector( x, y, z, vx, vy, vz );
@@ -64,10 +67,15 @@ public class Body {
 
         this.status = 3;
         this.activated = true;
+
+        if ( mapped ) {
+            bmap = new Map( ap, bn, radius );
+        }
+
     }
 
     /* body constructor - MKS units */
-    public Body( Dynamics a, int bn, StateVector v, double bm, double radius, boolean ifm ) {
+    public Body( Dynamics a, int bn, StateVector v, double bm, double radius, boolean ifm, boolean mapped  ) {
         this.unique = uniqueNumber++;
         this.ap = a;
         this.currentState = new StateVector( 0, 0, 0, 0, 0, 0 );
@@ -83,6 +91,11 @@ public class Body {
 
         this.status = 3;
         this.activated = true;
+
+        if ( mapped ) {
+            bmap = new Map( ap, bn, radius );
+        }
+
     }
 
     void setBodyCharacteristics(  String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm ) {
@@ -98,6 +111,80 @@ public class Body {
         this.currentState.vz = vz;
         this.inFreeMotion = ifm;
     }
+
+
+    // Body paint method draws body as single pixel, circle, or mapped sphere....
+    // copied and adapted from Orbit3D.java
+    void paint(Graphics g, Eye eye ) {
+        int colorIndex;
+        double apparentRadius, d;
+        StateVector loc = new StateVector();
+        loc.setStateVector( eye.locus.x, eye.locus.y, eye.locus.z, eye.locus.vx, eye.locus.vy, eye.locus.vz );
+        loc.zangle = eye.locus.zangle;
+        StateVector v = new StateVector( this.currentState.x, this.currentState.y, this.currentState.z, 0, 0, 0 );
+
+
+        if ( this != eye.bSubject && this.paint_it ) {                       // don't paint eye subject body
+
+            // v contains barycentric x,y,z and vx,vy,vz
+            v = Mathut.transformAroundEye( v, loc );
+            d = Math.sqrt( v.x*v.x + v.y*v.y + v.z*v.z );
+            apparentRadius = Math.abs( this.r * eye.dimension.z / d );
+//          if ( this.num == 4 ) System.out.println( this.num + " apparent radius " + apparentRadius );
+
+//          System.out.println( "body " + this.mapExists );
+
+            if ( this.mapExists && apparentRadius > 75 ) {
+                // here to draw circle with map inside
+                this.bmap.screenXYscale = ap.v_scale;
+                this.bmap.screenXoffset = ap.v_xoffset;
+                this.bmap.screenYoffset = ap.v_yoffset;
+//              System.out.println( "paint body map " + this.num);
+                this.bmap.paint( g, eye, this );
+
+            } else if ( apparentRadius > 1.5 ) {
+                // here to draw circle
+                g.setPaintMode();
+                g.setColor( Color.black );
+
+//              if ( this.num == 1 ) {
+//                  System.out.println( "app r " + apparentRadius );
+//                  System.out.println( this.r + " " + eye.dimension.z + " " + v.z );
+//              }
+                eye.paintCircle( g, v, apparentRadius, 5 );
+                ap.offGraphics.setPaintMode();
+                ap.offGraphics.setColor(Color.black);
+                if ( ap.showNumbers ) {
+                    eye.paintString( ap.offGraphics, "" + this.num, 2, v );
+                } else if ( ap.showNames ) {
+                    eye.paintString( ap.offGraphics, "" + this.name, 2, v );
+                }
+
+            } else {
+                // here to draw single pixel
+                // v contains body position transformed around eye onto -z axis
+                g.setPaintMode();
+                g.setColor( Color.black );
+
+                if ( this.num <= 10 ) {
+                    colorIndex = 2;    // if planet, colour black
+                }  else {
+                    colorIndex = 6;
+                }
+
+                eye.paintPoint( g, v, this.num, colorIndex );
+                ap.offGraphics.setPaintMode();
+                ap.offGraphics.setColor(Color.black);
+                if ( ap.showNumbers ) {
+                    eye.paintString( ap.offGraphics, "" + this.num, 2, v );
+                } else if ( ap.showNames ) {
+                    eye.paintString( ap.offGraphics, "" + this.name, 2, v );
+                }
+
+            }
+        }
+    }
+
 
     // centralBody is current planet selected to be viewed
     void paint( Graphics g ) {

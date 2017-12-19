@@ -20,21 +20,21 @@ public class Tetrahedron extends Process {
         StateVector sv = new StateVector( 10, 0, 0, 0, 0, 0 );
 
         // negative body numbers is a fix to prevent Body add_gravitational_acceleration() finding two body numbers the same
-        b[this.nbodies] = new Body( ap, -this.nbodies, svref, mass, 1.0, true );
+        b[this.nbodies] = new Body( ap, -this.nbodies, svref, mass, 1.0, true, false );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
 
-        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
+        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true, false );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
 
         sv.setStateVector( 0, 7, 0, 0, 0, 0 );
-        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
+        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true, false );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
 
         sv.setStateVector( 0, 2, 6, 0, 0, 0 );
-        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true );
+        b[this.nbodies] = new Body( ap, -this.nbodies, sv.addStateVector(svref), mass, 1.0, true, false );
         b[this.nbodies].referenceFrame = 0;
         nbodies++;
 /*                              leave ties out to prevent breakup of tetrahedron

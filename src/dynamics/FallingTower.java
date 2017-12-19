@@ -52,7 +52,7 @@ public class FallingTower extends Process{
 
         firstBnum = this.nbodies;
         for ( int n=0; n<nVectors; n++ ) {
-            this.b[ this.nbodies ] = new Body( ap, ap.ss.nbodies, barycentricState[n], 28.0, 100000.0, true );
+            this.b[ this.nbodies ] = new Body( ap, ap.ss.nbodies, barycentricState[n], 28.0, 100000.0, true, false );
             this.nbodies++;
         }
         lastBnum = this.nbodies;

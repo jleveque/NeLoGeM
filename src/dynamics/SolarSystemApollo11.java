@@ -285,7 +285,7 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         {    0.0, 90.0, 0, 0, 0, 0.0,  0 },           // 10 Apollo11 S-IVB
     };
 
-    Map bmap[] = new Map[12];                   // body maps
+//  Map bmap[] = new Map[12];                   // body maps
 
     SolarSystemApollo11() { }
 
@@ -303,7 +303,7 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         for ( int n=0; n<nrows; n++ ) {
             jd = ssbody[n][JDCT];
             s = new StateVector( km_m(ssbody[n][X]), km_m(ssbody[n][Y]), km_m(ssbody[n][Z]), km_m(ssbody[n][VX]), km_m(ssbody[n][VY]), km_m(ssbody[n][VZ]) );
-            b[n] = new Body( ap, (int)ssbody[n][BNUM], s, ssbody[n][MASS], ssbody[n][ERADIUS]*1000.0, true );
+            b[n] = new Body( ap, (int)ssbody[n][BNUM], s, ssbody[n][MASS], ssbody[n][ERADIUS]*1000.0, true, true );
             b[n].siderealClock = 0.0;
             b[n].siderealDay = axialRotation[n][5] * 60.0 * 60.0;               // body rotation period
             b[n].skipRadius = 1.0 * b[n].r;                                     // arriving bodies bounce off st skipRadius
@@ -316,7 +316,7 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         ap.setCalendar( jd );
 
         // add Apollo11 S-IVB rocket
-        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true );
+        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true, true );
         nbodies++;
     }
 
@@ -326,14 +326,14 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         this.ap = a;
     }
 
-
+/*
     void createMaps() {
         // create maps
         for ( int n=0; n<ap.nPlanets; n++ ) {
             bmap[n] = new Map( ap, n, ssbody[n][ERADIUS]*1000.0 );
         }
     }
-
+*/
 
     void moveEuler( double dt ) {
         int n;
@@ -387,7 +387,11 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
 
         // paint bodies
         for ( n=0; n<nbodies; n++ ) {
-            b[n].paint( g );
+            if ( ap.option > 0 ) {
+                b[n].paint( g );
+            } else {
+                b[n].paint( g, ap.eye );
+            }
         }
 
         // paint ties
@@ -395,7 +399,8 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
             t[n].paint( g );
         }
 
-        this.bmap[ ap.centralBody ].paint( g );
+        b[ ap.centralBody ].bmap.paint( g );
+//      this.bmap[ ap.centralBody ].paint( g );
 
     }
 

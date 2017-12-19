@@ -25,7 +25,7 @@ import javax.swing.*;
 
 
 public class Dynamics extends JFrame implements Runnable, MouseListener, WindowListener {
-    int option =  4;
+    int option =  1;
 
     JPanel canvas;
     BufferedImage offImage;
@@ -36,10 +36,11 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     private Thread testThread = null;
 
     boolean go = true;
-    boolean clearScreen = false;
+    boolean clearScreen = true;
     int count;
     int centralBody =   4;
     double screenXoffset, screenYoffset, screenXYscale;
+    Eye eye;
     double dt =  16.0;
     double G = 6.671984315419034E-11;       // gravitational constant
     boolean localGravity = false;
@@ -53,6 +54,9 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     int view = 0;                  // 0 = x-y (down z axis), 1 = x-z (down y-axis), 2 = y-z (down x axis)
     boolean yearRotate = false;   // set true to rotate eye around z axis annually
     double startJDCT;
+    boolean showNumbers = false;    // show body numbers
+    boolean showNames = false;      // show body names
+    double v_xoffset, v_yoffset, v_scale, zoom1x;
 
     double daySecs = 24.0 * 60.0 * 60.0;     // seconds per day
     double elapsedTime = 64800.0 - 197.44;   // elapsed time since simulation start (18hours added to turn Greenwich towards sun on 21 dec 2012)
@@ -82,7 +86,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         tetra = new Tetrahedron( this );
 
         ss.setAxialRotationParams();
-        ss.createMaps();
+//      ss.createMaps();
         ss.setAllSiderealClocks( elapsedTime );
 
 //      System.out.println( 7.023694035922034E+07 - 7.023698945180266E7  );
@@ -114,13 +118,28 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
 
                 offGraphics.setColor( Color.black );
 
-                if ( option == 10 || option == 4 ) {
+                // 2D paint paints selected option centralBody
+                if ( option == 10 || option == 4 || option == 0 ) {
                     if ( count > 6 ) {
                         ft1.paint(g);
                     }
                 }
                 ss.paint(g);
                 tetra.paint(g);
+
+                if ( option == 0 ) {
+                    // 3D paint
+                    // reset paintstroke count;
+                    eye.npaintstrokes = 0;
+                    // paint all paintstrokes
+                    eye.paint( g, offGraphics, offGraphics );
+
+//                  showEyeSelection(false);
+
+                    eye.drawEyeFrame( offGraphics );
+
+                }
+
 
                 offGraphics.setColor( Color.black );
                 offGraphics.drawString( currentDate, 5, canvasSize.height-10);
@@ -144,6 +163,21 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         screenXoffset = canvasSize.width / 2.0;
         screenYoffset = canvasSize.height / 2.0;
 
+        // Eye zoom
+        v_xoffset = screenXoffset;
+        v_yoffset = screenYoffset;
+        zoom1x = v_xoffset / 4.55E+12;
+        zoom1x = v_xoffset / 2.55E+10;
+        v_scale = 512.0 * 1024.0 * zoom1x;
+
+        // Eye instantiation
+        eye = new Eye( this, 0, 0, 1E13, 0, 0, 0, 1E12 );  // standard view down onto solar system
+        eye.setEyeSubjectBody( ss.b[10] );      // Moon
+        eye.setEyeObjectBody( ss.b[4] );        // Earth
+        eye.typeOfEye = 1;
+        eye.printEyeLocus();
+
+
         selectOption();
     }
 
@@ -159,6 +193,9 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         Thread myThread = Thread.currentThread();
         while (testThread == myThread) {
             if ( go ) {
+
+                eye.setEye();
+//              eye.printEyeLocus();
 /*
                 // i, j are dt and orbit radius indices used in TestBed
                 for ( int j=0; j<3; j++ ) {
@@ -207,6 +244,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     public void stop() {
         testThread = null;
     }
+
 
     void setCalendar( double jd ) {
         double advanceTime;
