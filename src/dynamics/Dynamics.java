@@ -25,7 +25,7 @@ import javax.swing.*;
 
 
 public class Dynamics extends JFrame implements Runnable, MouseListener, WindowListener {
-    int option =  1;
+    int option =  0;
 
     JPanel canvas;
     BufferedImage offImage;
@@ -41,7 +41,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     int centralBody =   4;
     double screenXoffset, screenYoffset, screenXYscale;
     Eye eye;
-    double dt =  16.0;
+    double dt =  32.0;
     double G = 6.671984315419034E-11;       // gravitational constant
     boolean localGravity = false;
     SolarSystemApollo11 ss;
@@ -167,7 +167,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         v_xoffset = screenXoffset;
         v_yoffset = screenYoffset;
         zoom1x = v_xoffset / 4.55E+12;
-        zoom1x = v_xoffset / 2.55E+10;
+//      zoom1x = v_xoffset / 2.55E+10;
         v_scale = 512.0 * 1024.0 * zoom1x;
 
         // Eye instantiation
@@ -175,7 +175,10 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         eye.setEyeSubjectBody( ss.b[10] );      // Moon
         eye.setEyeObjectBody( ss.b[4] );        // Earth
         eye.typeOfEye = 1;
+        System.out.println( "Eye Subject " + eye.bSubject.num + " looks at eye object " + eye.bObject.num);
         eye.printEyeLocus();
+        ss.b[4].currentState.printStateVectorKm();
+        ss.b[10].currentState.printStateVectorKm();
 
 
         selectOption();
@@ -194,7 +197,6 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
         while (testThread == myThread) {
             if ( go ) {
 
-                eye.setEye();
 //              eye.printEyeLocus();
 /*
                 // i, j are dt and orbit radius indices used in TestBed
@@ -206,23 +208,28 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
 */
 //              go = false;
 
+                ss.moveEuler( dt );
+                tetra.moveEuler( dt );
+                if ( count > 5 ) ft1.moveEuler(dt);
+
 
                 if ( count == 5 ) {
                     ft1 = new FallingTower( this, 4, 32.543618, 44.42408, 1.0, 100000.0 );   // Babylon
                 }
+
                 if ( count > 5 ) {
                     ft1.moveReferenceFrame();
+
                     if ( count%100 == 0 ) {
                         if ( ( option == 4 || option == 10 ) && ft1.index > 0 ) {
                             ft1.index--;
                             ft1.flagUnfixed(ft1.currentState[ ft1.index ]);
                         }
                     }
-                    ft1.moveEuler(dt);
+
                 }
 
-                ss.moveEuler( dt );
-                tetra.moveEuler( dt );
+                eye.setEye();
 
                 if ( option==1 || option==12 ) {
                     System.out.println( currentDate + " " + Mathut.distanceBetween( ss.b[11], ss.b[4].currentState) / 1000.0 );
@@ -231,6 +238,8 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
 
                 currentDate = ( advanceCalendar( dt ) );
                 ss.setAllSiderealClocks( elapsedTime );
+
+//              System.out.println( Mathut.distanceBetween( ss.b[4], ss.b[10].currentState ));
 
                 repaint();
                 count++;
@@ -353,7 +362,13 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
     }
 
     void selectOption() {
-        if ( option == 1 ) {
+        if ( option == 0 ) {
+            // 3D view of Earth from Monn
+            centralBody = 4;                        // was 4
+            clearScreen =  true;                     // was true
+            dt = 128.0;                            // was 512.0
+            screenXYscale =  45000.0 * 10.0/1E11;   // was 200000.0 * 10.0/1E11;
+        } else if ( option == 1 ) {
             // Apollo 11 trajectory
             centralBody =   4;
             clearScreen = false;
@@ -375,7 +390,7 @@ public class Dynamics extends JFrame implements Runnable, MouseListener, WindowL
             // Earth Falling Tower
             centralBody =   4;
             clearScreen = true;
-            dt = 32.0;
+            dt =   16;
             screenXYscale =    200000.0 * 10.0/1E11;
         } else if ( option == 5 ) {
             // Mars

@@ -8,11 +8,11 @@ package dynamics;
 /**
  *
  * @author CFD
- * 
+ *
  * Testbed creates a solar system with just sun and earth in circular orbit around Sun
- * and compares expected orbit period with measured orbit period using 3 different 
+ * and compares expected orbit period with measured orbit period using 3 different
  * orbit radii and 3 different dt timesteps, printing out results.
- * 
+ *
  * There is no graphics display for this.
  */
 public class SolarSystemTestbed extends Process{
@@ -29,16 +29,16 @@ public class SolarSystemTestbed extends Process{
     int dtIndex = 0;
     double mSun, mEarth, rEarth, vTangential, orbitCircumference, orbitPeriod, orbitError;
     public StateVector state[] = new StateVector[1000];                    // body states for RK4
-    
-    public SolarSystemTestbed( ) {        
+
+    public SolarSystemTestbed( ) {
     }
-    
+
     public SolarSystemTestbed( Dynamics a ) {
         super();
-        ap = a; 
+        ap = a;
 
         for ( int n=0; n<1000; n++ ) state[n] = new StateVector();
-        
+
    }
 
     void setupTest() {
@@ -47,28 +47,28 @@ public class SolarSystemTestbed extends Process{
         mEarth = 5.972465000E24;                                                // mass kg
         dtIndex = 0;
         radiusIndex = 0;
-        
+
         getOrbitCharacteristics();
 
         // create solar system
-        //          OrbitMin a, Pool pl, double jd, int number, String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm 
-        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  0, 0, 0, 0, 0, 0, 0, 0, false );
+        //          OrbitMin a, Pool pl, double jd, int number, String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm
+        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  0, 0, 0, 0, 0, 0, 0, 0, false, true );
         nbodies++;
-        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  0, 0, 0, 0, 0, 0, mSun, 1.0, true );
+        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  0, 0, 0, 0, 0, 0, mSun, 1.0, true, true );
         nbodies++;
-        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  rEarth, 0, 0, 0, vTangential, 0, mEarth, 1.0, true );
+        b[nbodies] = new Body( ap, nbodies,  ap.currentJDCT,  rEarth, 0, 0, 0, vTangential, 0, mEarth, 1.0, true, true );
         nbodies++;
 
 //      pool.b[pool.nbodies] = new Body( ap, pool, 2458033.5, pool.nbodies, "BARYCENTRE", 0, 0, 0, 0, 0, 0, 0, false );
 //      pool.b[pool.nbodies] = new Body( ap, pool, 2458033.5, pool.nbodies, "Sun", 0, 0, 0, 0, 0, 0, mSun, true );
 //      pool.b[pool.nbodies] = new Body( ap, pool, 2458033.5, pool.nbodies, "Earth", rEarth, 0, 0, 0, vTangential, 0, mEarth, true );
 
-    } 
-    
+    }
+
     void test( int i, int j ) {
         dtIndex = i;
         radiusIndex = j;
-                        
+
         System.out.println();
         System.out.println( i + "/" + j + " " + dtRange[dtIndex] + " r: " + radiusGkm[radiusIndex] + " 10^6 km" );
 
@@ -90,13 +90,13 @@ public class SolarSystemTestbed extends Process{
             ap.clearScreen = true;
             ap.repaint();
 //          b[2].currentState.printStateVectorKm();
-        }    
+        }
 //      System.out.println( "***RK4 iterations " + iterations);
-        
-    }   
+
+    }
 
     boolean checkTestComplete() {
-        
+
         // check if planet has returned to x axis
         boolean complete = false;
 //      System.out.println( "RK4 test " + ap.elapsedTime + " " + ap.dt + " " + b[2].currentState.y + " " + b[2].lastState.y );
@@ -108,12 +108,12 @@ public class SolarSystemTestbed extends Process{
             System.out.println( "Actual elapsed time " + actualPeriod + " days, expected period " + expectedPeriod + " error " + orbitError );
             System.out.println( "Orbit radius max error +" + maxRadius + ", actual radius " + rEarth + ", radius min error -" + minRadius + " metres" );
             resetRadii();
-            complete = true;        
+            complete = true;
         }
-      
+
         return( complete );
-    } 
-    
+    }
+
     void getOrbitCharacteristics() {
         ap.dt = dtRange[ dtIndex ];
         rEarth = radiusGkm[ radiusIndex ] * 1.0E09;                             // radial distance metres for 365.256 day orbit
@@ -122,20 +122,20 @@ public class SolarSystemTestbed extends Process{
         orbitPeriod = orbitCircumference / (vTangential * 60 * 60 * 24);        // orbit period in days
         expectedPeriod = orbitPeriod;
         ap.elapsedTime = 0;
-        lastElapsedTime = 0;        
+        lastElapsedTime = 0;
     }
 
    // starting out on the x axis, a body returns to the x axis when its last y position is -ve, and current y position is +ve
     double trueElapsedTime( double elapsedTime, double currentY, double lastY, double timestep ) {
-        double trueElapsedTime = elapsedTime - ( currentY * timestep ) / ( currentY - lastY ); 
+        double trueElapsedTime = elapsedTime - ( currentY * timestep ) / ( currentY - lastY );
         return( trueElapsedTime );
     }
-    
+
     void resetRadii() {
         maxRadius = 0;
         minRadius = 0;
     }
-    
+
     void checkRadius() {
         double currentRadius = Mathut.distanceBetween( b[2], b[1].currentState );
         double rdifference;
@@ -153,13 +153,13 @@ public class SolarSystemTestbed extends Process{
     }
 
     void moveEuler( double dt ) {
-        
+
         RK4.moveRK4( ap, b, nbodies, state, dt );
-        
+
         ap.elapsedTime += ap.dt;
-        
-    }   
-    
+
+    }
+
 }
 
 

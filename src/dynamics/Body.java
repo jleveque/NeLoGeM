@@ -123,18 +123,21 @@ public class Body {
         loc.zangle = eye.locus.zangle;
         StateVector v = new StateVector( this.currentState.x, this.currentState.y, this.currentState.z, 0, 0, 0 );
 
+//      if ( this ==  eye.bObject ) System.out.println( "eye locus v " + this.num + ": " + loc.vx + " " + loc.vy + " " + loc.vz );
 
         if ( this != eye.bSubject && this.paint_it ) {                       // don't paint eye subject body
 
             // v contains barycentric x,y,z and vx,vy,vz
+//          if ( this ==  eye.bObject ) System.out.println( "eye object " + this.num + ": " + v.x + " " + v.y + " " + v.z );
             v = Mathut.transformAroundEye( v, loc );
+//          if ( this ==  eye.bObject ) System.out.println( "transformedAroundEye object " + this.num + ": " + v.x + " " + v.y + " " + v.z );
             d = Math.sqrt( v.x*v.x + v.y*v.y + v.z*v.z );
             apparentRadius = Math.abs( this.r * eye.dimension.z / d );
 //          if ( this.num == 4 ) System.out.println( this.num + " apparent radius " + apparentRadius );
 
 //          System.out.println( "body " + this.mapExists );
 
-            if ( this.mapExists && apparentRadius > 75 ) {
+            if ( this.mapExists && apparentRadius > 575 ) {
                 // here to draw circle with map inside
                 this.bmap.screenXYscale = ap.v_scale;
                 this.bmap.screenXoffset = ap.v_xoffset;

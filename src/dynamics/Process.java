@@ -202,10 +202,13 @@ public class Process {
 
         // paint bodies
         for ( n=0; n<nbodies; n++ ) {
-            if ( ap.option > 0 ) {
-                b[n].paint( g );
-            } else {
+            if ( ap.option == 0 ) {
                 b[n].paint( g, ap.eye );
+            } else {
+                if ( n == ap.centralBody ) {
+                    ap.ss.b[ ap.centralBody ].bmap.paint( g );
+                }
+                b[n].paint( g );
             }
         }
 

@@ -245,7 +245,7 @@ public class Eye {
 //      dimension.ay = (double)(app.ymax / 2);    // y offset
         dimension.x = (double)(app.canvasSize.width / 2.0);
         dimension.y = (double)(app.canvasSize.height / 2.0 );
-        dimension.z = (double)(-app.canvasSize.width * 56.0 );
+        dimension.z = (double)(-app.canvasSize.width *   16.0 );
         dimension.ax = (double)(app.canvasSize.width / 2.0);    // x offset of centre from image top left
         dimension.ay = (double)(app.canvasSize.height / 2.0);    // y offset
         System.out.println( "Eye XYZ dimensions" + dimension.x + " " + dimension.y + " " + dimension.z );
@@ -705,7 +705,7 @@ public class Eye {
                 x2 = (int)v.x;
                 y2 = (int)v.y;
 
-//              if ( num == 275) System.out.println( "star eye v " + num + ": " + s.x + " " + s.y + " " + s.z );
+//              if ( num == 4 ) System.out.println( "star eye v " + num + ": " + s.x + " " + s.y + " " + s.z );
 //
 
                 // if one point is inside screen, draw the line
@@ -799,6 +799,7 @@ public class Eye {
         if ( v.z < 0 ) {
             if ( this.typeOfEye == 1 ) v = unPinHole( v );
             v = screenScale( v );
+//          System.out.println( "star eye v " + num + ": " + v.x + " " + v.y + " " + v.z );
 
             rc[0] = Math.sqrt( (dimension.x - v.x)*(dimension.x - v.x) + (dimension.y - v.y)*(dimension.y - v.y)  );
             rc[1] = Math.sqrt( (-dimension.x - v.x)*(-dimension.x - v.x) + (-dimension.y - v.y)*(-dimension.y - v.y)  );

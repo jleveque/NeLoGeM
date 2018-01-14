@@ -318,6 +318,9 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         // add Apollo11 S-IVB rocket
         b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 6.343499939926510E+10, -1.383448940239173E+11, -1.693750687410682E+07,  2.085980004925432E+04,  1.835087874228012E+04,  7.745846007922585E+02,  1000.0, 20.0, true, true );
         nbodies++;
+
+        b[nbodies] = new Body( ap, nbodies, 2440419.194479167, 0, 0, 1.3E+13, 0,  0,  0,  1000.0, 20.0, false, false );
+        nbodies++;
     }
 
     // this used to read Orbit3D csv file of planet state vectors
@@ -380,29 +383,6 @@ towards the Moon, the LM and CSM decoupled from the SIVB at 17:49 UT on 16 July 
         }
     }
 
-
-
-    void paint( Graphics g ) {
-        int n;
-
-        // paint bodies
-        for ( n=0; n<nbodies; n++ ) {
-            if ( ap.option > 0 ) {
-                b[n].paint( g );
-            } else {
-                b[n].paint( g, ap.eye );
-            }
-        }
-
-        // paint ties
-        for ( n=0; n<nties; n++ ) {
-            t[n].paint( g );
-        }
-
-        b[ ap.centralBody ].bmap.paint( g );
-//      this.bmap[ ap.centralBody ].paint( g );
-
-    }
 
     double km_m( double v ) {
         return( 1000.0 * v );
