@@ -68,8 +68,11 @@ public class Eye {
     int uniqueDispersedPolygonID = 0;
     boolean polygonPaintingInProcess;
 
-
+    // Default constructor
     public Eye() {
+        bSubject = null;    // no assigned subject body
+        bObject = null;     // no assigned object body
+
         // create empty linked list of paintstrokes
         nearPaintStroke = new PaintStroke( -1, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         farPaintStroke = new PaintStroke( (int)1E20, nearPaintStroke, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -82,26 +85,21 @@ public class Eye {
     }
 
     public Eye( Dynamics app, double x, double y, double z, double vx, double vy, double vz, double sd  ) {
-        double a, lx, ly, lz, l;
-        int width, height;
+        this(); // Call default constructor
 
-        width = app.canvasSize.width;
-        height = app.canvasSize.height;
-        eyeImage = app.createImage( width, height);
+        eyeImage = app.createImage( app.canvasSize.width, app.canvasSize.height );
         eyeGraphics = eyeImage.getGraphics();
 
-        this.num = 233;
+        num = 233;
         this.app = app;
-        bSubject = null;                       // no assigned subject body
-        bObject = null;                        // no assigned object body
         locus = new StateVector( x, y, z, vx, vy, vz );
         udjat = new StateVector( 0, 0, -1E13, 0, 0, 0 );
 //      System.out.println( "eye locus " + locus.x + " " + + locus.y + " " + + locus.z + " " +" v " + locus.vx + " " + + locus.vy + " " + + locus.vz + " "  );
         printEyeLocus();
 
 //      screen = new StateVector();
-//      this.screen.z = sd;
-//        this.screen.z = 1E12;
+//      screen.z = sd;
+//        screen.z = 1E12;
 
         setEyeDimensions();
         typeOfEye = 0;
@@ -111,23 +109,14 @@ public class Eye {
 
         absRel = 0;
         relLocus = new StateVector( locus.x, locus.y, locus.z, locus.vx, locus.vy, locus.vz );
-
-        // create empty linked list
-        nearPaintStroke = new PaintStroke( -1, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        farPaintStroke = new PaintStroke( (int)1E20, nearPaintStroke, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        paintedPolygon =  new DispersedPolygon( 2, 64 );
-        // create empty linked list of dispersed polygons
-        nearPolygon = new DispersedPolygon( -1, null, nextUniqueDispersedPolygonID(), 0 );
-        farPolygon = new DispersedPolygon( 1E20, nearPolygon, nextUniqueDispersedPolygonID(), 0 );
-        polygonPaintingInProcess = false;
     }
 
     public Eye( Dynamics app, Body sbody, Body obody, double sd ) {
-        double a, lx, ly, lz, l;
+        this(); // Call default constructor
 
         this.app = app;
-        this.bSubject = sbody;
-        this.bObject = obody;
+        bSubject = sbody;
+        bObject = obody;
 
         locus = new StateVector( sbody.currentState.x, sbody.currentState.y, sbody.currentState.z, sbody.currentState.vx, sbody.currentState.vy, sbody.currentState.vz );
         udjat = new StateVector( 0, 0, -1E13, 0, 0, 0 );
@@ -140,15 +129,6 @@ public class Eye {
 
         absRel = 0;  // absolute view = 0, relative view = 1
         relLocus = new StateVector( locus.x, locus.y, locus.z, locus.vx, locus.vy, locus.vz );
-
-        // create empty linked list
-        nearPaintStroke = new PaintStroke( -1, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        farPaintStroke = new PaintStroke( (int)1E20, nearPaintStroke, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        paintedPolygon =  new DispersedPolygon( 2, 64 );
-        // create empty linked list of dispersed polygons
-        nearPolygon = new DispersedPolygon( -1, null, nextUniqueDispersedPolygonID(), 0 );
-        farPolygon = new DispersedPolygon( 1E20, nearPolygon, nextUniqueDispersedPolygonID(), 0 );
-        polygonPaintingInProcess = false;
     }
 
 /*
