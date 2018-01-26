@@ -198,12 +198,12 @@ public class Eye {
 */
 
     int nextUniqueDispersedPolygonID() {
-        int id = this.uniqueDispersedPolygonID;
+        int id = uniqueDispersedPolygonID;
         // don't allow max int value to be exceeded
-        if ( uniqueDispersedPolygonID < 2147483647 ) {
+        if ( uniqueDispersedPolygonID < Integer.MAX_VALUE ) {
             uniqueDispersedPolygonID++;
         } else {
-            uniqueDispersedPolygonID = 2;           // 0 = nearPolygon uniqueID, 1 = farPolygon unniqueID, so start at 2
+            uniqueDispersedPolygonID = 2; // 0 = nearPolygon uniqueID, 1 = farPolygon unniqueID, so start at 2
         }
         return( id );
     }
