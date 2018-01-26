@@ -26,21 +26,23 @@ public class DispersedPolygon {
     DispersedPolygon nextPolygon;       // next polygon in linked list
 
     DispersedPolygon() {
+        uniqueID = 0;
+        vertexCount = 0;
         npoints = 0;
     }
 
-    DispersedPolygon( int id, int vcount ){
+    DispersedPolygon( int id, int vcount ) {
+        this(); // Call default constructor
+
         uniqueID = id;
         vertexCount = vcount;
-        npoints = 0;
     }
 
-    DispersedPolygon( double zdepth, DispersedPolygon nextp, int polygonID, int vcount ) {
-        this.uniqueID = polygonID;
-        this.vertexCount = vcount;
-        this.depth = zdepth;
-        this.nextPolygon = nextp;
-        this.npoints = 0;
+    DispersedPolygon( double zdepth, DispersedPolygon nextp, int id, int vcount ) {
+        this( id, vcount );
+
+        depth = zdepth;
+        nextPolygon = nextp;
     }
 
     void setColors( Color a, Color b ) {
