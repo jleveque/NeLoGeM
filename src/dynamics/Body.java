@@ -48,68 +48,56 @@ public class Body {
     boolean paint_it = true;
 
     /* default constructor */
-    public Body(){}
+    public Body(){
+        unique = uniqueNumber++;
+        ap = null;
+        currentState = new StateVector( 0, 0, 0, 0, 0, 0 );
+    }
+
+        /* body constructor - MKS units */
+    public Body( Dynamics a, int bn, StateVector v, double bm, double radius, boolean ifm, boolean mapped ) {
+        this(); // Call default constructor
+
+        ap = a;
+        currentState.copyStateVectors( v );
+
+        num = bn;
+        m = bm;
+        r = radius;
+        inFreeMotion = ifm;
+
+//      setBodyCharacteristics(  name, v.x, v.y, v.z, v.vx, v.vy, v.vz, m, ifm );
+
+        for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
+
+        lastState = new StateVector();
+
+        status = 3;
+        activated = true;
+
+        if ( mapped ) {
+            bmap = new Map( ap, bn, radius );
+        }
+    }
 
     /* body constructor - MKS units */
     public Body( Dynamics a, int bn, double jd, double x, double y, double z, double vx, double vy, double vz, double bm, double radius, boolean ifm, boolean mapped ) {
-        this.unique = uniqueNumber++;
-        this.ap = a;
-        this.currentState = new StateVector( x, y, z, vx, vy, vz );
-        this.num = bn;
-        this.m = bm;
-        this.r = radius;
-        this.inFreeMotion = ifm;
+        this( a, bn, new StateVector(x, y, z, vx, vy, vz), bm, radius, ifm, mapped );
 
-//      setBodyCharacteristics(  name, x, y, z, vx, vy, vz, m, ifm );
-        for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
-
-        lastState = new StateVector();
-
-        this.status = 3;
-        this.activated = true;
-
-        if ( mapped ) {
-            bmap = new Map( ap, bn, radius );
-        }
-
+        this.jd = jd;
     }
 
-    /* body constructor - MKS units */
-    public Body( Dynamics a, int bn, StateVector v, double bm, double radius, boolean ifm, boolean mapped  ) {
-        this.unique = uniqueNumber++;
-        this.ap = a;
-        this.currentState = new StateVector( 0, 0, 0, 0, 0, 0 );
-        currentState.copyStateVectors( v );
-
-        this.num = bn;
-        this.m = bm;
-        this.r = radius;
-        this.inFreeMotion = ifm;
-
-        for ( int n=0; n<=2; n++ ) advanced[n] = new StateVector();
-        lastState = new StateVector();
-
-        this.status = 3;
-        this.activated = true;
-
-        if ( mapped ) {
-            bmap = new Map( ap, bn, radius );
-        }
-
-    }
-
-    void setBodyCharacteristics(  String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm ) {
+    void setBodyCharacteristics( String name, double x, double y, double z, double vx, double vy, double vz, double m, boolean ifm ) {
         this.name = name;
         this.m = m;
-        this.r = 1.0;
-        this.jd = jd;
-        this.currentState.x = x;
-        this.currentState.y = y;
-        this.currentState.z = z;
-        this.currentState.vx = vx;
-        this.currentState.vy = vy;
-        this.currentState.vz = vz;
-        this.inFreeMotion = ifm;
+        r = 1.0;
+        currentState.x = x;
+        currentState.y = y;
+        currentState.z = z;
+        currentState.vx = vx;
+        currentState.vy = vy;
+        currentState.vz = vz;
+        inFreeMotion = ifm;
     }
 
 
