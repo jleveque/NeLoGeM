@@ -19,7 +19,7 @@ public class PaintStroke {
     int xor;                      // XOR on = 1, off = 0
     int colourIndex;              // colour index
     int param[] = new int[4];     // params (e.g. points)
-    static Color XORcolor = Color.white ;
+    static Color XORcolor = Color.white;
     static Color colorpalette[] = new Color[10];
     boolean PolygonInProcess;
     int polygonUniqueID;          // each polygon has an unique ID
@@ -31,60 +31,35 @@ public class PaintStroke {
 
     // default constructor
     PaintStroke() {
-        PolygonInProcess = false;
-        setColorPalette();
-    }
-
-    PaintStroke( int gtype, Graphics g, int gxor, int gcolor, int p0, int p1, int p2, int p3) {
-        graphicType = gtype;
-        graphics = g;
-        xor = gxor;
-        colourIndex = gcolor;
-        param[0] = p0;
-        param[1] = p1;
-        param[2] = p2;
-        param[3] = p3;
-        PolygonInProcess = false;
-        setColorPalette();
-    }
-
-    PaintStroke( int gtype, int glayer, int gxor, int gcolor, int p0, int p1, int p2, int p3) {
-        graphicType = gtype;
+        graphics = null;
         layer = 0;
-        layer = glayer;
-        xor = gxor;
-        colourIndex = gcolor;
-        param[0] = p0;
-        param[1] = p1;
-        param[2] = p2;
-        param[3] = p3;
         PolygonInProcess = false;
         setColorPalette();
+    }
+
+    PaintStroke( int gtype, Graphics g, int gxor, int gcolor, int p0, int p1, int p2, int p3 ) {
+        this(); // Call default constructor
+
+        setPaintStroke( gtype, 0, gxor, gcolor, p0, p1, p2, p3 );
+        graphics = g;
+    }
+
+    PaintStroke( int gtype, int glayer, int gxor, int gcolor, int p0, int p1, int p2, int p3 ) {
+        this(); // Call default constructor
+
+        setPaintStroke( gtype, glayer, gxor, gcolor, p0, p1, p2, p3 );
     }
 
     PaintStroke( double zdepth, PaintStroke nextp, int gtype, int glayer, int gxor, int gcolor, int p0, int p1, int p2, int p3, int polygonID, int polygonVcount, int vn ) {
+        this( gtype, glayer, gxor, gcolor, p0, p1, p2, p3 );
 
         // linked list parameters
-        this.depth = zdepth;
-        this.nextPaintStroke = nextp;
-
-        // paintstroke parameters
-        graphicType = gtype;
-        layer = 0;
-        layer = glayer;
-        xor = gxor;
-        colourIndex = gcolor;
-        param[0] = p0;
-        param[1] = p1;
-        param[2] = p2;
-        param[3] = p3;
-        setColorPalette();
-        PolygonInProcess = false;
+        depth = zdepth;
+        nextPaintStroke = nextp;
 
         polygonUniqueID = polygonID;          // (if present) each polygon has an unique ID
         polygonVertexCount = polygonVcount;   // number of vertices in polygon
         polygonVertexNum = vn;                // vertex number (0-63)
-
     }
 
     void setPaintStroke( int gtype, int glayer, int gxor, int gcolor, int p0, int p1, int p2, int p3) {
