@@ -35,63 +35,63 @@ public class VectorMap extends Body {
     VectorMap() {
     }
 
-    VectorMap( Dynamics a) {
-        this.ap = a;
+    VectorMap( Dynamics a ) {
+        ap = a;
     }
 
     // read in planet vectorMap
     VectorMap( Dynamics a, int bnum ) {
-        this.ap = a;
-        int nrows;
-        StateVector v = new StateVector();
-        EarthMap simpleEarthMap = new EarthMap();
-        nrows = simpleEarthMap.findNrows();
+        this( a );
 
-        for ( int n=0; n<nrows; n++ ) {
+        EarthMap simpleEarthMap = new EarthMap();
+        int nrows = simpleEarthMap.findNrows();
+
+        for ( int n = 0; n < nrows; n++ ) {
             vector[n] = simpleEarthMap.readNextRow();
         }
+
         vpoints = nrows;
 
         mapPresent = true;
-        createFlyVectorMap( );
+        createFlyVectorMap();
         setColorPalette();
-
     }
 
     // create XYZ axes vectorMap at lat-long-rmul on planet b0
     VectorMap( Dynamics a, int b0, double lat, double lon, double rmul, double scale ) {
-        this.ap = a;
+        this( a );
+
         this.bnum = b0;
-        AxisMap ax = new AxisMap( this.ap, bnum, lat, lon, rmul, scale);
+        AxisMap ax = new AxisMap( this.ap, bnum, lat, lon, rmul, scale );
         int nVectors = ax.findNvectors();
 
-        for ( int n=0; n<nVectors; n++ ) {
+        for ( int n = 0; n < nVectors; n++ ) {
             vector[n] = ax.readNextVector();
         }
 
         vpoints = nVectors;
 
         mapPresent = true;
-        createFlyVectorMap( );
+        createFlyVectorMap();
         setColorPalette();
-
     }
 
     // create a latitude-longitude vector map, maybe including tropics and degree labels
     VectorMap( Dynamics a, double mapRadius, double degreeStep, boolean tropics, boolean textOn ) {
+        this( a );
+
         int i, j, m, n, nsteps, nhalfsteps;
         double x, y, z, vectorStepAngle, vectorHalfStepAngle, latitude, angle;
 
-        ap = a;
-        sunXYZ = new StateVector(  );
-        earthXYZ = new StateVector(  );
-        eyeXYZ = new StateVector(  );
+        sunXYZ = new StateVector();
+        earthXYZ = new StateVector();
+        eyeXYZ = new StateVector();
 
         // first vector is from equator in positive latitude, same longitude
         nsteps = (int)( 360.0 / degreeStep );
-        vectorStepAngle = (degreeStep) * Mathut.degreesToRadians;
+        vectorStepAngle = degreeStep * Mathut.degreesToRadians;
         nhalfsteps = nsteps * 2;
-        vectorHalfStepAngle =  vectorStepAngle * 0.5;
+        vectorHalfStepAngle = vectorStepAngle * 0.5;
         y = mapRadius * Math.cos( vectorHalfStepAngle );
         z = mapRadius * Math.sin( vectorHalfStepAngle );
 
