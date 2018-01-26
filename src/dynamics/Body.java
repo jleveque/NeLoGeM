@@ -49,9 +49,16 @@ public class Body {
 
     /* default constructor */
     public Body(){
-        unique = uniqueNumber++;
         ap = null;
         currentState = new StateVector( 0, 0, 0, 0, 0, 0 );
+        unique = uniqueNumber;
+
+        // Increment uniqueNumber, but don't allow max int value to be exceeded
+        if ( uniqueNumber < Integer.MAX_VALUE ) {
+            uniqueNumber++;
+        } else {
+            uniqueNumber = 0;
+        }
     }
 
         /* body constructor - MKS units */
