@@ -25,7 +25,8 @@ public class ReferenceFrame {
     double rmul;                // radius multiple (1.0 for surface)
 
     // default constructor
-    ReferenceFrame() { }
+    ReferenceFrame() {
+    }
 
     // reference frame origin and axes held in statevector XYZ
     ReferenceFrame( Dynamics a, StateVector origin, StateVector xAxis, StateVector yAxis, StateVector zAxis ) {
@@ -63,7 +64,7 @@ public class ReferenceFrame {
         StateVector o = new StateVector( rmul * ap.ss.b[bref].r, 0, 0, 0, 0, 0 );
 //      System.out.println( "rmul " + rmul + " vy "  + (axialRadius * angularVelocity) );
 
-        for ( n=0; n<ns; n++ ) {
+        for ( n = 0; n < ns; n++ ) {
             // move vector from planet 0,0,0 origin to surface on X axis
             v[n] = addPositionStateVector( v[n], o );
             // rotate vector around Y axis to required latitude
@@ -71,7 +72,7 @@ public class ReferenceFrame {
             // if body is fixed, find its vx,vy,vz in rotating reference frame
             // otherwise leave vx, vy, vz unchanged
             if ( v[n].flag1 == 1 ) {
-                radialDistance = Math.sqrt( v[n].x*v[n].x + v[n].y*v[n].y + v[n].z*v[n].z );
+                radialDistance = Math.sqrt( v[n].x * v[n].x + v[n].y * v[n].y + v[n].z * v[n].z );
                 axialRadius = radialDistance * Math.cos( rLat );
                 // tangential velocity at rmul radius
                 v[n].vx = 0;
@@ -89,7 +90,7 @@ public class ReferenceFrame {
             // v[n] is now a barycentric state vector carrying XYZ. vx, vy, vz
         }
 
-        return( v );
+        return ( v );
     }
 
     // transformFromBarycentricXYZ() is opposite of transformToBarycentricXYZ()
@@ -102,7 +103,7 @@ public class ReferenceFrame {
         double signrotate = +1;
         StateVector o = new StateVector( rmul * ap.ss.b[bref].r, 0, 0, 0, 0, 0 );
 
-        for ( n=0; n<ns; n++ ) {
+        for ( n = 0; n < ns; n++ ) {
             // offset vector by planet barycentric XYZ location
             v[n] = subtractPositionStateVector( v[n], ap.ss.b[bref].currentState );
             // tilt back axis of planet
@@ -118,7 +119,7 @@ public class ReferenceFrame {
             // v[n] now holds XYZ and vx, vy, vz in rotating reference frame
         }
 
-        return( v );
+        return ( v );
     }
 
     // move vector v
@@ -129,7 +130,7 @@ public class ReferenceFrame {
         v.vx += m.x;
         v.vy += m.y;
         v.vz += m.z;
-        return( v );
+        return ( v );
     }
 
     // add state vector v  xyz, vx, vy, vz
@@ -140,7 +141,7 @@ public class ReferenceFrame {
         v.vx += m.vx;
         v.vy += m.vy;
         v.vz += m.vz;
-        return( v );
+        return ( v );
     }
 
     // subtract state vector v xyz, vx, vy, vz
@@ -151,7 +152,7 @@ public class ReferenceFrame {
         v.vx -= m.vx;
         v.vy -= m.vy;
         v.vz -= m.vz;
-        return( v );
+        return ( v );
     }
 
     //
@@ -160,8 +161,6 @@ public class ReferenceFrame {
         v.x = v.z;
         v.z = v.y;
         v.y = temp;
-        return( v );
+        return ( v );
     }
-
-
 }
