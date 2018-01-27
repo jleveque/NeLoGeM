@@ -18,9 +18,10 @@ public class AxisMap extends VectorMap {
     StateVector axes[] = new StateVector[3];
     int currentVector;
 
-    AxisMap() {}
+    AxisMap() {
+    }
 
-    AxisMap( Dynamics a, int refBody, double lat, double lon, double rmul, double scale) {
+    AxisMap( Dynamics a, int refBody, double lat, double lon, double rmul, double scale ) {
         this.ap = a;
         bref = refBody;
         latitude = lat;
@@ -40,21 +41,17 @@ public class AxisMap extends VectorMap {
         // axes[0] is now z axis pointing skyward on surface (true)
         // axes[1] is now x axis pointing east (true)
         // axes[2] is now y axis pointing north (true)
-
         swapAxes();
         swapAxes();
         //  axes[0] is now x axis pointing east
         //  axes[1] is now y axis pointing north
         //  axes[2] is now z axis pointing skyward on surface
 
-
-
 //      System.out.println( "required    " + lat + ", " + lon + ", " + rmul );
 //      System.out.println( "axes origin " + axes[0].x + ", " + axes[0].y + ", " + axes[0].z );
 //      System.out.println( "axes Z " + axes[0].vx + ", " + axes[0].vy + ", " + axes[0].vz );
 //      System.out.println( "axes Y " + axes[1].vx + ", " + axes[1].vy + ", " + axes[1].vz );
 //      System.out.println( "axes X " + axes[2].vx + ", " + axes[2].vy + ", " + axes[2].vz );
-
         currentVector = 0;
 
         axes[0].colour = 6;      // red
@@ -75,7 +72,7 @@ public class AxisMap extends VectorMap {
 
     // extend axes longer
     void extendAxes( double mul ) {
-        for (int n=0; n<3; n++ ) {
+        for ( int n = 0; n < 3; n++ ) {
             axes[n].vx = axes[n].vx * mul;
             axes[n].vy = axes[n].vy * mul;
             axes[n].vz = axes[n].vz * mul;
@@ -83,7 +80,7 @@ public class AxisMap extends VectorMap {
     }
 
     void moveAxes( StateVector s ) {
-        for (int n=0; n<3; n++ ) {
+        for ( int n = 0; n < 3; n++ ) {
             axes[n].x += s.x;
             axes[n].y += s.y;
             axes[n].z += s.z;
@@ -121,12 +118,11 @@ public class AxisMap extends VectorMap {
         axes[2] = Mathut.transformAroundZaxis( axes[2], angle * Mathut.degreesToRadians );
     }
 
-     int findNvectors() {
-         return( 3 );
-     }
+    int findNvectors() {
+        return ( 3 );
+    }
 
-     StateVector readNextVector() {
-         return( axes[currentVector++] );
-     }
-
+    StateVector readNextVector() {
+        return ( axes[currentVector++] );
+    }
 }
