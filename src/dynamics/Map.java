@@ -18,10 +18,10 @@ public class Map extends Body {
     VectorMap vmap[] = new VectorMap[10];
     double screenXoffset, screenYoffset, screenXYscale;
     double[][] bodyMap = {
-        { 1.00, 90.0, 0, 2, },                                                  // N pole
-        { 1.00, -90.0, 0, 1, },                                                 // S pole
-        { 1.0000001569609842, 52.0339, -2.4235, 2, },
-        { 1.0010001569609842, 52.0339, -1.4235, 1, }
+        {1.00, 90.0, 0, 2,}, // N pole
+        {1.00, -90.0, 0, 1,}, // S pole
+        {1.0000001569609842, 52.0339, -2.4235, 2,},
+        {1.0010001569609842, 52.0339, -1.4235, 1,}
     };
 
     final int RMUL = 0;
@@ -30,7 +30,8 @@ public class Map extends Body {
     final int PEN = 3;
 
     // default constructor
-    Map() { }
+    Map() {
+    }
 
     Map( Dynamics a, int num, double r ) {
         this.ap = a;
@@ -47,7 +48,6 @@ public class Map extends Body {
             vmap[0] = new VectorMap();
 //          vmap[2] = new VectorMap();
         }
-
     }
 
     void paint( Graphics g ) {
@@ -62,31 +62,29 @@ public class Map extends Body {
             vmap[0].spinAndTiltVectorMap( ap.ss.b[bnum] );
             vmap[0].paint( g, Color.BLACK );
         }
-/*
+        /*
         // paint axes  map
         if ( vmap[2].mapPresent ) {
             vmap[2].spinAndTiltVectorMap( ap.ss.b[bnum] );
             vmap[2].paint( g );
         }
-*/
+         */
         // paint latitude and longitude grid map
         vmap[1].spinAndTiltVectorMap( ap.ss.b[bnum] );
         vmap[1].paint( g );
 
         // paint simple map
-        for ( n=0; n<4; n++ ) {
+        for ( n = 0; n < 4; n++ ) {
             v.latitude = bodyMap[n][LAT];
             v.longitude = bodyMap[n][LON];
             v.length = 1.0;
-            fractionOfDay = ap.siderealClock / ( ap.SiderealDay ) ;
-            v = Mathut.degreesLatLong_to_relativeXYZ( ap.ss.b[bnum], v, fractionOfDay  );
+            fractionOfDay = ap.siderealClock / ( ap.SiderealDay );
+            v = Mathut.degreesLatLong_to_relativeXYZ( ap.ss.b[bnum], v, fractionOfDay );
             ap.offGraphics.drawLine( (int)Mathut.x_t( ap, v.x ), (int)Mathut.y_t( ap, v.y ), (int)Mathut.x_t( ap, v.x ), (int)Mathut.y_t( ap, v.y ) );
         }
-
-
     }
 
-    public void paint(Graphics g, Eye eye, Body b0 ) {
+    public void paint( Graphics g, Eye eye, Body b0 ) {
         int n, j, x1, x2, y1, y2, l1, z1, nmaps, nvectors;
         double r, a, d, l, angle, hr;
         boolean scaleIt = true;
@@ -136,7 +134,6 @@ public class Map extends Body {
             // and transform everything else the same way.
             b = vmap[n].transformVectorMapAroundEye( b0, loc );
             if ( n == 0) q.setStateVector( b );
-
         }
 
         // paint transformed maps
@@ -153,8 +150,5 @@ public class Map extends Body {
 */
 
 //      printCSVflyMap( 3 );
-
     }
-
-
 }
