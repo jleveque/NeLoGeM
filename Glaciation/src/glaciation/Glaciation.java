@@ -589,8 +589,8 @@ class Asteroid {
     double iceWaterDepth = 0;
     boolean printFlag = true;
     double surfaceArea;                                 // surface area of asteroid
-    double mass;                                        // mass of asteroid (earth 5.972 � 10^24 kg)
-    double atmosphereMass;                              // (earth 5.1480�10^18 kg)
+    double mass;                                        // mass of asteroid (earth 5.972 × 10^24 kg)
+    double atmosphereMass;                              // (earth 5.1480×10^18 kg)
     double topOfAtmosphere;
     int topLayerOfAtmosphere;
     double surfaceGravity = 9.81;                       // surface gravitaional acceleration (should be calculated)
@@ -1120,19 +1120,19 @@ class Asteroid {
         return( watts );
     }
 
-    // StefanÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Boltzmann radiation law
+    // StefanÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œBoltzmann radiation law
     double stefanBoltzmannHeatflow( double emissivity, double temperatureK ) {
         double watts = 0;
         double sigma = 5.670373E-8;
-        watts = emissivity * sigma * Math.pow(temperatureK, 4.0);  // StefanÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Boltzmann constant W m^-2 K^-4
+        watts = emissivity * sigma * Math.pow(temperatureK, 4.0);  // StefanÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œBoltzmann constant W m^-2 K^-4
         return( watts );
     }
 
-    // Inverse StefanÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Boltzmann radiation law
+    // Inverse StefanÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œBoltzmann radiation law
     double stefanBoltzmannTemperature( double emissivity, double watts ) {
         double temperature = 0;
         double sigma = 5.670373E-8;
-        temperature = Math.pow( watts / (emissivity * sigma), 0.25 );  // StefanÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Boltzmann constant W m^-2 K^-4
+        temperature = Math.pow( watts / (emissivity * sigma), 0.25 );  // StefanÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œBoltzmann constant W m^-2 K^-4
         return( temperature );
     }
 
@@ -1217,16 +1217,16 @@ class Asteroid {
     }
 
     // source https://www.acs.org/content/acs/en/climatescience/atmosphericwarming/singlelayermodel.html
-    // (incoming) (1 � a)Save = (1 � e)sTp4 + esTa4 (outgoing) . . . . . . . . .(1)
+    // (incoming) (1 – a)Save = (1 – e)sTp4 + esTa4 (outgoing) . . . . . . . . .(1)
     // (absorbed) esTp4 = 2 esTa4 (emitted) . . . . . . . . . . . . . . . . . . (2)
     // Ta4 = (1/2) Tp4 . . . . . . . . . . . . . . . . . . . . . . . . . . . . .(3)
     // We can substitute for Ta4 in the planetary balance equation (1) and solve for Tp
-    // Tp = {[2 (1 � a)Save]/ [s(2 � e)]}1/4
+    // Tp = {[2 (1 – a)Save]/ [s(2 – e)]}1/4
     // tested: results are same as in ACS
     void ACSalgebra() {
         double save = 342.0;                    // W/m2 mean solar radiation
         double albedo = 0.3;                    // earth mean albedo
-        double sigma = 5.67E-8;                 // Stefan-Boltzmann constant, 5.67�10�8 W�m�2�K�4
+        double sigma = 5.67E-8;                 // Stefan-Boltzmann constant, 5.67·10–8 W·m–2·K–4
         double emissivity, ta;
         System.out.println( "ACS single layer atmosphere" );
         for ( emissivity=0; emissivity<=1.0; emissivity += 0.1 ) {
@@ -2206,7 +2206,7 @@ class Asteroid {
         }
         System.out.println( "asteroid radius " + r + " net upward heat flow rate " + hfl );
         System.out.println( "asteroid column mass  " + totalMass + " asteroid mass " + totalMass * this.surfaceArea );
-        System.out.println( "True Earth mass = 5.972 � 10^24 kg");
+        System.out.println( "True Earth mass = 5.972 × 10^24 kg");
     }
 
     // print asteroid R, C, and RC time constants
@@ -2606,7 +2606,7 @@ double[][] iceCharacteristics = {
             this.radioactiveHeatGenerated = 0;
             this.emissivity = 0.80;                 // ???
             this.absorptivity = 0.80;
-            this.expansivity = 0.00369;             // 1/K coefficient at 0�C and 1 bar https://www.engineeringtoolbox.com/air-properties-d_156.html
+            this.expansivity = 0.00369;             // 1/K coefficient at 0°C and 1 bar https://www.engineeringtoolbox.com/air-properties-d_156.html
             this.modulusElasticity = 1.01325E5; // https://www.engineeringtoolbox.com/air-properties-d_156.html
             this.colourIndex[0] = 10;               // mid gray
             this.colourIndex[1] = 10;               // cyan
@@ -3745,7 +3745,7 @@ class SolarRadiation {
         return( degreesToRadians( d ) );
     }
 
-    // The hour angle is the sun�s angular deviation from south
+    // The hour angle is the sun’s angular deviation from south
     // tested working
     double hourAngle( double lat, double dec ) {
         double ha;
@@ -3805,7 +3805,7 @@ class SolarRadiation {
 /*
         source: https://www.cs.colostate.edu/~cs160/.Summer16/resources/Java_printf_method_quick_reference.pdf
         Java printf( ) Method Quick Reference
-        System.out.printf( �format-string� [, arg1, arg2, � ] );
+        System.out.printf( “format-string” [, arg1, arg2, … ] );
 
         Format String:
         Composed of literals and format specifiers. Arguments are required only if there are format specifiers in the
